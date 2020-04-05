@@ -19,17 +19,17 @@ drop table if exists Users cascade;
 
 create table Users (
     uid         serial primary key,
-    name        varchar(30),
-    username    varchar(20),
-    password    varchar(20),
-    contact     char(8),
+    name        varchar(30) NOT NULL,
+    username    varchar(20) NOT NULL,
+    password    varchar(20) NOT NULL,
+    contact     char(8)     NOT NULL,
     email       varchar(40),
     date_joined timestamp
 );
 
 create table Customers (
     uid         serial primary key references Users on delete cascade,
-    address     varchar(60),
+    address     varchar(60) NOT NULL,
     card_number char(16),
     cvc         char(3),
     default_payment integer,
@@ -38,8 +38,8 @@ create table Customers (
 
 create table Restaurants (
     rid         serial primary key,
-    name        varchar(30),
-    address     varchar(60),
+    name        varchar(30) NOT NULL,
+    address     varchar(60) NOT NULL,
     min_amt_threshold integer
 );
 
@@ -51,8 +51,8 @@ create table RestaurantStaff (
 
 create table Promos (
     pid         serial primary key,
-    start_date  date,
-    end_date    date,
+    start_date  date  NOT NULL,
+    end_date    date  NOT NULL,
     promo_type  integer,
     discount    integer
 );
@@ -74,7 +74,7 @@ create table RPromos (
 create table Food (
     fid         serial primary key,
     rid         serial not null,
-    name        varchar(30),
+    name        varchar(30) not null,
     category    varchar(30),
     price       decimal(38,2),
     food_limit  integer,
@@ -121,12 +121,13 @@ create table WorkSchedules (
 create table FTWorkSchedules (
     wid         serial primary key references WorkSchedules on delete cascade,
     uid         serial not null,
-    day_option  integer,
-    D1          integer,
-    D2          integer,
-    D3          integer,
-    D4          integer,
-    D5          integer,
+    day_option  smallint not null
+                check (day_option in (1,2,3,4,5,6,7)),
+    D1          smallint not null,
+    D2          smallint not null,
+    D3          smallint not null, 
+    D4          smallint not null,
+    D5          smallint not null,
     date_created timestamp,
     foreign key (uid) references Users on delete cascade
 );
@@ -144,10 +145,15 @@ create table Deliveries (
     oid         serial primary key references Orders,
     uid         serial not null,
     rating      varchar(150),
-    depart_for_restaurant timestamp,
-    arrive_at_restaurant timestamp,
-    depart_for_location timestamp,
-    arrive_at_location timestamp,
+    t1          timestamp,
+    t2          timestamp,
+    t3          timestamp,
+    t4          timestamp,
+    -- t1 = depart for restaurant
+    -- t2 = arrive at restaurant
+    -- t3 = depart for location
+    -- t4 = arrive at location
+    -- remember to indicate and explain in appendix or report
     foreign key (uid) references Riders
 );
 
