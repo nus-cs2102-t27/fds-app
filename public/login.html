@@ -12,29 +12,35 @@
     <title>Food Delivery Service Portal</title>
   </head>
   <body>
-    <div class="card p-4 bg-light">
+    <div class="align-center">
+      <h1>Food Delivery Service Portal</h1><br>
+    </div>
+    <div class="login-box">
       <form class="login-form" action="/api/auth/login" method="post">
-        <div class="w-75">
-          <div class="d-flex form-group">
-            <label class="w-25" for="login_username">Username</label>
-            <input type="text" class="w-75 border rounded p-1" id="login_username" name="username"></input><br>
+        <div class="user-pass-container">
+          <div class="fds-input-group">
+            <label class="text-input-label" for="login_username">Username</label>
+            <input type="text" class="text-input-field" id="login_username" name="username" required></input>
           </div>
-          <div class="d-flex form-group">
-            <label class="w-25" for="login_password">Password</label>
-            <input type="text" class="w-75 border rounded p-1" id="login_password" name="password"></input><br>
+          <div class="fds-input-group">
+            <label class="text-input-label" for="login_password">Password</label>
+            <input type="password" class="text-input-field" id="login_password" name="password" required></input>
           </div>
         </div>
-        <div class="form-group">
-          <input type="radio" name="userType" id="login_cust" value="customer">
+        <div class="fds-input-group">
+          <input type="radio" name="userType" id="login_cust" value="customer" required>
           <label for="login_cust">Customer</label>
+          <span class="break-20"></span>
           <input type="radio" name="userType" id="login_rider" value="rider">
           <label for="login_rider">Rider</label>
+          <span class="break-20"></span>
           <input type="radio" name="userType" id="login_staff" value="staff">
           <label for="login_staff">Restaurant Staff</label>
+          <span class="break-20"></span>
           <input type="radio" name="userType" id="login_manager" value="manager">
           <label for="login_manager">FDS Manager</label>
         </div>
-          <input class="btn btn-primary" type="submit" value="Login">
+          <input class="btn btn-primary submit-btn" type="submit" value="Login">
       </form>
     </div>
 
