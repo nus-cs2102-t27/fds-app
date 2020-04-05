@@ -16,7 +16,7 @@ authRouter.post("/login", async (req, res) => {
     }
     const user = rows[0];
     if (user.password === password) {
-        res.cookie(JSON.stringify({ ...user, role: userType }));
+        res.cookie("auth", JSON.stringify({ ...user, role: userType }));
         res.redirect(getRedirectionForUserType(userType));
         return;
     } 
