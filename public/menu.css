@@ -1,0 +1,10 @@
+.fds-table {
+    max-width: 800px;
+}
+
+.number-input {
+    border: 1px solid #d6e0e0;
+    border-radius: 4px;
+    padding: 3px;
+    width: 40px;
+}
