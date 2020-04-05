@@ -16,13 +16,13 @@
       <form class="login-form" action="/api/auth/login" method="post">
         <div class="w-75">
           <div class="d-flex form-group">
-            <label for="login_username">Username</label>
+            <label class="w-25" for="login_username">Username</label>
             <input type="text" class="w-75 border rounded p-1" id="login_username" name="username"></input><br>
           </div>
-          <div class="row form-group">
-            <label class="col" for="login_password">Password</label>
-            <input type="password" class="col-6 border rounded p-1" id="login_password" name="password"></input><br>
-        </div>
+          <div class="d-flex form-group">
+            <label class="w-25" for="login_password">Password</label>
+            <input type="text" class="w-75 border rounded p-1" id="login_password" name="password"></input><br>
+          </div>
         </div>
         <div class="form-group">
           <input type="radio" name="userType" id="login_cust" value="customer">
