@@ -14,8 +14,8 @@
   </head>
   <body>
     <h1 id="restaurant-name">Food</h1><br>
-    <form class="d-flex flex-column align-items-center w-75" action="/api/ord" method="post">
-        <table class="table" id="food">
+    <form class="d-flex flex-column align-items-center w-75" action="/api/order" method="post">
+        <table class="table" id="confirm">
           <tr>
             <th>Name</th>
             <th>Price</th>
@@ -24,7 +24,7 @@
         </table>
         <div class="total-price">Total:  $<span id="total-price"></span></div>
         <input id="rid-input" hidden name="rid">
-		<input class="btn btn-primary submit-btn" type="submit" value="Submit"></input> <!-- onclick="window.location='/app/order-confirmation.html'" value="Next" -->
+        <input class="btn btn-primary submit-btn" type="submit" value="Order">
     </form>
 
 
@@ -33,6 +33,6 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script src="/app/menu.js"></script>
+    <script src="/app/order-confirmation.js"></script>
   </body>
 </html>

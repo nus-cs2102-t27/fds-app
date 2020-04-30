@@ -24,6 +24,12 @@ input[type=radio]:checked + label {
     color: #007bff;
 }
 
+
+th:last-child,
+td:last-child {
+    text-align: right;
+}
+
 .break-20 {
     margin: 10px;
 }
