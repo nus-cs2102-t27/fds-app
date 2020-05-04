@@ -30,6 +30,99 @@ td:last-child {
     text-align: right;
 }
 
+table.normal-table th:last-child, 
+table.normal-table td:last-child {
+    text-align: inherit;
+}
+
+table.shift-table th:not(:first-child), 
+table.shift-table td:not(:first-child) {
+    min-width: 150px;
+}
+
+table.shift-table td input {
+    padding: 1px 3px;
+    width: 35%;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.review-table {
+    width: 1000px;
+}
+
+.review-table .review-header {
+    font-weight: bold;
+    width: 100%;
+}
+
+
+.review-table .review-header,
+.review-table .review-row {
+    width: 100%;
+}
+
+.review-table .review-header,
+.review-table .review-row,
+.review-table .review-row .review-form,
+.review-table .review-row .review-food-map .review-food-item {
+    display: flex;
+}
+
+.review-table .review-row .review-food-map .review-food-item {
+    justify-content: space-between;
+}
+
+.review-table .order-column,
+.review-table .restaurant-column,
+.review-table .food-column,
+.review-table .price-column,
+.review-table .review-column,
+.review-table .rating-column {
+    padding: 4px;
+}
+
+.review-table .food-column {
+    padding-right: 10px;
+}
+
+.review-table .order-column {
+    width: 10%;
+}
+
+.review-table .restaurant-column {
+    width: 15%;
+}
+
+.review-table .food-column {
+    width: 25%;
+}
+
+.review-table .price-column {
+    width: 10%;
+}
+
+.review-table .review-column {
+    width: 25%;
+}
+
+.review-table .rating-column {
+    width: 15%;
+}
+
+.review-form {
+    width: 40%;
+}
+
+.review-table .review-form .review-column {
+    width: 63%;
+}
+
+.review-table .review-form .rating-column {
+    width: 37%;
+}
+
 .break-20 {
     margin: 10px;
 }
@@ -38,6 +131,15 @@ td:last-child {
     padding: 25px 30px;
     width: 80%;
     max-width: 700px;
+    background: #eef3f3;
+    border: 1px solid #d6e0e0;
+    border-radius: 4px;
+}
+
+.delivery-box {
+    padding: 25px 30px;
+    width: 80%;
+    max-width: 1000px;
     background: #eef3f3;
     border: 1px solid #d6e0e0;
     border-radius: 4px;
@@ -55,6 +157,15 @@ td:last-child {
     flex-direction: column;
     align-items: center;
     width: 60%;
+}
+
+.log-hours-box {
+    padding: 25px 30px;
+    width: 80%;
+    max-width: 1000px;
+    background: #eef3f3;
+    border: 1px solid #d6e0e0;
+    border-radius: 4px;
 }
 
 .fds-input-group {

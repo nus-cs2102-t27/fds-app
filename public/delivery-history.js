@@ -45,12 +45,13 @@ $.ajax("/api/del/all", { dataType: "json" }).done(deliveries => {
                 </table>
               </td>
               <td>
-                <table class="table-borderless">
+                <table class="table-borderless normal-table">
                   <tr>
                     <th>Left for Restaurant</th>
                     <th>Reached Restaurant</th>
                     <th>Left for Customer</th>
                     <th>Reached Customer</th>
+                  </tr>
                   <tr>
                     <td>${formatTime(new Date(d.t1))}</td>
                     <td>${formatTime(new Date(d.t2))}</td>

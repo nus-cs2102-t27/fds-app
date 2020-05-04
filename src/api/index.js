@@ -4,6 +4,7 @@ const res = require("./restaurants");
 const menu = require("./menu");
 const ord = require("./orders");
 const del = require("./delivery");
+const cust = require("./customer");
 
 const apiRouter = express.Router();
 
@@ -15,5 +16,6 @@ apiRouter.use("/res", res);
 apiRouter.use("/menu", menu);
 apiRouter.use("/ord", ord);
 apiRouter.use("/del", del);
+apiRouter.use("/cust", cust);
 
 module.exports = apiRouter;

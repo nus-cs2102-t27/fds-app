@@ -12,32 +12,25 @@
     <title>Food Delivery Service Portal</title>
   </head>
   <body>
-    <div class="align-center">
-      <h1>Log Working Hours</h1><br>
-    </div>
-    <div class="log-hours-box">
-      <form class="login-form" action="/api/del/loghours" method="post">
-          <table id="log-hours-table" class="normal-table shift-table table">
-            <tr>
-              <th>Day</th>
-              <th>Shift 1</th>
-              <th>Shift 2</th>
-              <th>Shift 3</th>
-              <th>Shift 4</th>
-            </tr>
-          </table>
-          <div>
-            <input class="btn btn-primary submit-btn" type="submit" value="Submit">
-            <a href='/app/rider.html' class="btn btn-secondary submit-btn">Back</a>
-          </div>
-      </form>
-    </div>
+    <h1>Current Orders</h1><br>
+    <div class="d-flex flex-column align-items-center w-75">
+        <table class="table normal-table" id="current_orders">
+          <tr>
+            <th>Order Time</th>
+            <th>Restaurant</th>
+            <th>Food</th>
+            <th>Delivery Address</th>
+            <th>Take</th>
+          </tr>
+        </table>
+        <input type="button" onclick="window.location = '/app/rider.html'" class="btn btn-primary submit-btn" value="Back">
+      </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script src="/app/log-hours.js"></script>
+    <script src="/app/choose-deliveries.js"></script>
   </body>
 </html>

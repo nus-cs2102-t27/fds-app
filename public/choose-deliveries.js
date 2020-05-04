@@ -15,17 +15,9 @@ function formatDate(date) {
     return `${day} ${month} ${year} &nbsp ${hourFormatted}:${minuteFormatted}${morning}`;
 }
 
-function formatReview(review) {;
-    if (review) {
-        return review;
-    } else {
-        return "No review written";
-    }
-}
-
-$.ajax("/api/ord/all", { dataType: "json" }).done(orders => {
-    orders.forEach(order => {        
-        $("#orders").append(`
+$.ajax("/api/del/orders", { dataType: "json" }).done(orders => {
+    orders.forEach(order => {
+        $("#current_orders").append(`
             <tr>
               <td>${formatDate(new Date(order.order_time))}</td>
               <td>${order.restaurant}</td>
@@ -34,13 +26,15 @@ $.ajax("/api/ord/all", { dataType: "json" }).done(orders => {
                   ${order.food.map((f) => `
                     <tr>
                       <td>${f.qty} x ${f.name}</td>
-                      <td>$${f.price}</td>
+                      <td>${f.price}</td>
                     </tr>
                   `).join("")}
                 </table>
               </td>
-              <td>${formatReview(order.review)}</td>
-              <td>$${order.total_price}</td>
+              <td>${order.location}</td>
+              <td>
+                <input type="button" class="btn btn-primary submit-btn" value="Select">
+              </td>
             </tr>
         `);
     })

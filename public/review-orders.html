@@ -14,7 +14,17 @@
   <body>
     <h1>Orders to Review</h1><br>
     <div class="d-flex flex-column align-items-center w-75">
-        <table class="table" id="review">
+        <div class="review-table" id="review">
+          <div class="review-header">
+            <div class="order-column">Order</div>
+            <div class="restaurant-column">Restaurant</div>
+            <div class="food-column">Food</div>
+            <div class="price-column">Total Price</div>
+            <div class="review-column">Review</div>
+            <div class="rating-column">Rating</div>
+          </div>
+        </div>
+        <!-- <table class="table" id="review">
           <tr>
             <th>Order</th>
             <th>Food</th>
@@ -22,7 +32,7 @@
             <th>Review</th>
             <th>Rating</th>
           </tr>
-        </table>
+        </table> -->
         <input type="button" onclick="window.location = '/app/customer.html'" class="btn btn-primary submit-btn" value="Back">
       </div>
 

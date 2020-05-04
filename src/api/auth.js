@@ -3,10 +3,10 @@ const pgPool = require("../pg-pool");
 
 const authRouter = express.Router();
 
+const SIGNUP_QUERY = `SELECT NewCustomer($1, $2, $3, $4, $5, $6, $7, $8, $9)`;
+
 authRouter.post("/login", async (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
-    const userType = req.body.userType;
+    const { username, password, userType } = req.body;
 
     const { rows } = await pgPool.query(getLoginQuery(userType), [username]);
     if (rows.length === 0) {
@@ -23,6 +23,31 @@ authRouter.post("/login", async (req, res) => {
     } 
     res.sendStatus(401);
 });
+
+authRouter.post("/signup", async (req, res) => {
+    const { 
+        name, 
+        username, 
+        password, 
+        passwordRetype,
+        contact,
+        email,
+        address,
+        cardNumber,
+        cvc,
+        defaultPayment
+    } = req.body;
+
+    if (password !== passwordRetype) {
+        res.status(400).send("Passwords don't match");
+        return;
+    }
+
+    await pgPool.query(SIGNUP_QUERY, [name, username, password, contact, email,
+                                        address, cardNumber, cvc, defaultPayment]);
+    res.redirect("/app/signup-success.html");
+    return;
+})
 
 authRouter.get("/me", async (req, res) => {
 	const userId = req.cookies.uid;

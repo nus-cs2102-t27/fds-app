@@ -13,6 +13,10 @@ function updateTotalCost() {
     $("#total-price").html(total.toFixed(2));
 }
 updateTotalCost();
+
+$("#delivery-fee").load(`/api/res/${rid}/deliveryfee`);
+
+$("#acc-points").load(`/api/cust/points`);
         
 $.ajax("/api/menu/" + rid, { dataType: "json" }).done(menu => {
     menu.forEach(food => {

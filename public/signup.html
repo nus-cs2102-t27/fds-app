@@ -16,7 +16,7 @@
       <h1>Customer Sign Up</h1><br>
     </div>
     <div class="login-box">
-      <form class="login-form" action="/api/auth/login" method="post">
+      <form class="login-form" action="/api/auth/signup" method="post">
         <div class="user-pass-container">
           <div class="fds-input-group">
             <label class="text-input-label">Full Name</label>
@@ -32,7 +32,7 @@
           </div>
           <div class="fds-input-group">
             <label class="text-input-label" for="login_password">Re-type Password</label>
-            <input type="password" class="text-input-field" id="login_password" name="password" required></input>
+            <input type="password" class="text-input-field" id="login_password_retype" name="passwordRetype" required></input>
           </div>
           <div class="fds-input-group">
             <label class="text-input-label">Contact</label>
@@ -48,7 +48,7 @@
           </div>
           <div class="fds-input-group">
             <label class="text-input-label">Card Number</label>
-            <input type="text" class="text-input-field" name="cardnumber" required></input>
+            <input type="text" class="text-input-field" name="cardNumber" required></input>
           </div>
           <div class="fds-input-group">
             <label class="text-input-label">CVC</label>
@@ -56,9 +56,9 @@
           </div>
           <div class="fds-input-group">
             <label class="text-input-label">Default Payment</label>
-            <select class="custom-select" name="default" required>
-              <option>Cash</option>
-              <option>Card</option>
+            <select class="custom-select" name="defaultPayment" required>
+              <option value=0>Cash</option>
+              <option value=1>Card</option>
             </select>
           </div>
         </div>
