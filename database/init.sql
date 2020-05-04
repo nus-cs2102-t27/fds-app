@@ -221,9 +221,13 @@ RETURNS void AS $$
 with rows as (
     INSERT INTO Users(name, username, password, contact, email, date_joined)
     VALUES ($1, $2, $3, $4, $5, now()) RETURNING uid
+),
+content as (
+    INSERT INTO Riders(uid)
+        SELECT uid FROM rows RETURNING uid
 )
 INSERT INTO PTRiders(uid, weekly_base_salary)
-    SELECT uid, $6 FROM rows;
+    SELECT uid, $6 FROM content;
 $$ language sql;
 
 create or replace function NewFDSPromo(uid int, start_date date, end_date date, promo_type int, discount int)
@@ -361,7 +365,6 @@ content as (
 SELECT ModifyPointsByOrder((SELECT oid FROM content ORDER BY oid DESC LIMIT 1));
 $$ language sql;
 
-drop function if exists LastFiveLocations(int);
 create or replace function LastFiveLocations(uid int)
 RETURNS TABLE(location varchar(60)) AS $$
 SELECT location
