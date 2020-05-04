@@ -42,7 +42,8 @@ create table Restaurants (
     rid         serial primary key,
     name        varchar(30) NOT NULL,
     address     varchar(60) NOT NULL,
-    min_amt_threshold integer
+    min_amt_threshold integer NOT NULL,
+    delivery_fee integer NOT NULL
 );
 
 create table RestaurantStaff (
@@ -204,31 +205,19 @@ create or replace function NewFTRider(name varchar(30), username varchar(20), pa
                                         monthly_base_salary int, day_option smallint, D1 smallint, D2 smallint, D3 smallint, D4 smallint,
                                         D5 smallint)
 RETURNS void AS $$
-with rows as (
+DECLARE
+    userId int;
+    workId int;
+BEGIN
     INSERT INTO Users(name, username, password, contact, email, date_joined)
-    VALUES (name, username, password, contact, email, now()) RETURNING uid
-)
-INSERT INTO Riders(uid)
-    SELECT uid FROM rows;
-with rows as (
-    INSERT INTO Users(name, username, password, contact, email, date_joined)
-    VALUES (name, username, password, contact, email, now()) RETURNING uid
-),
-ridercontent as (SELECT monthly_base_salary AS monthly_base_salary)
-INSERT INTO FTRiders(uid, monthly_base_salary)
-    SELECT uid, monthly_base_salary FROM rows, ridercontent;
-with rows as (
-    INSERT INTO Users(name, username, password, contact, email, date_joined)
-    VALUES (name, username, password, contact, email, now()) RETURNING uid
-),
-ws as (
-    INSERT INTO WorkSchedules(wid) VALUES(DEFAULT) RETURNING wid
-),
-wscontent as (SELECT day_option AS day_option, D1 AS D1, D2 AS D2, D3 AS D3, D4 AS D4, D5 AS D5, now() as date_created)
-INSERT INTO FTWorkSchedules(wid, uid, day_option, D1, D2, D3, D4, D5, date_created)
-    SELECT wid, uid, day_option, D1, D2, D3, D4, D5, date_created
-    FROM ws, rows, wscontent;
-$$ language sql;
+    VALUES (name, username, password, contact, email, now()) RETURNING uid INTO userId;
+    INSERT INTO Riders(uid) VALUES (userId);
+    INSERT INTO FTRiders(uid, monthly_base_salary) VALUES (userId, $6);
+    INSERT INTO WorkSchedules(wid) VALUES(DEFAULT) RETURNING wid INTO workId;
+    INSERT INTO FTWorkSchedules(wid, uid, day_option, D1, D2, D3, D4, D5, date_created)
+    VALUES (workId, userId, $7, $8, $9, $10, $11, $12, now());
+END;
+$$ language plpgsql;
 
 create or replace function NewPTRider(name varchar(30), username varchar(20), password varchar(20), contact char(8), email varchar(40),
                                         weekly_base_salary int)
@@ -444,7 +433,7 @@ DECLARE
 BEGIN
     SELECT COUNT(*) INTO c FROM PTWorkSchedules
     WHERE wid = NEW.wid AND (
-        start_time < now() + '1 week'::interval
+        start_time < (now() + '1 week'::interval)
     );
     IF c > 0 THEN
         RAISE EXCEPTION 'Work schedule needs to be created at least 1 week in advance';
@@ -921,31 +910,31 @@ select NewCustomer('Joya Saunter','jsaunter0','rT4kVKbcju','95492674','jsaunter0
 -- select NewCustomer('Bob','bobbytables','bobby','91343651','bobbyyyy@hotmail.com','72 Tampines Street','5694029593029105','234','0');
 
 -- -- Restaurants
-insert into Restaurants (name, address, min_amt_threshold) values ('Pizza World', '86486 Melrose Street', 14);
-insert into Restaurants (name, address, min_amt_threshold) values ('Chocolate Land', '40 Independence Terrace', 13);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Chicken Corner', '7304 Gale Trail', 24);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Fish Delights', '46 Spohn Junction', 20);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Tavern Place', '8342 Mitchell Parkway', 14);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Indian Delights', '733 Main Junction', 22);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Pizza Hut', '65205 Manufacturers Terrace', 20);
--- insert into Restaurants (name, address, min_amt_threshold) values ('KFC', '8371 Granby Circle', 12);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Foodie Paradise', '39 Anhalt Pass', 28);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Chinese World', '110 Montana Way', 10);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Gourmet Land', '6 Monument Circle', 14);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Lim Eatery', '58 Mayer Junction', 16);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Koi', '9929 School Parkway', 22);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Llao Llao', '8 Lakeland Court', 12);
--- insert into Restaurants (name, address, min_amt_threshold) values ('MacDonalds', '9051 Golden Leaf Way', 20);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Wendys', '7 Shasta Court', 28);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Fried Chicken Specials', '85 Springs Drive', 17);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Arnolds', '9460 Maple Wood Crossing', 16);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Canton Paradise', '34 Dakota Terrace', 11);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Dian Xiao Er', '36228 Golf Course Avenue', 10);
--- insert into Restaurants (name, address, min_amt_threshold) values ('FoodKing', '59686 Rutledge Terrace', 24);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Pizza Place', '11904 Pleasure Pass', 28);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Corleone Corner', '015 Thompson Crossing', 24);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Hainan Chicken', '84674 Alpine Alley', 15);
--- insert into Restaurants (name, address, min_amt_threshold) values ('Laksa Mama', '9 Crownhardt Terrace', 23);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Pizza World', '86486 Melrose Street', 14, 3);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Chocolate Land', '40 Independence Terrace', 13, 5);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Chicken Corner', '7304 Gale Trail', 24, 5);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Fish Delights', '46 Spohn Junction', 20, 4);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Tavern Place', '8342 Mitchell Parkway', 14, 3);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Indian Delights', '733 Main Junction', 22, 5);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Pizza Hut', '65205 Manufacturers Terrace', 20, 7);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('KFC', '8371 Granby Circle', 12, 3);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Foodie Paradise', '39 Anhalt Pass', 28, 2);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Chinese World', '110 Montana Way', 10, 5);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Gourmet Land', '6 Monument Circle', 14, 6);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Lim Eatery', '58 Mayer Junction', 16, 4);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Koi', '9929 School Parkway', 22, 5);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Llao Llao', '8 Lakeland Court', 12, 3);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('MacDonalds', '9051 Golden Leaf Way', 20, 2);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Wendys', '7 Shasta Court', 28, 5);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Fried Chicken Specials', '85 Springs Drive', 17, 6);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Arnolds', '9460 Maple Wood Crossing', 16, 8);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Canton Paradise', '34 Dakota Terrace', 11, 8);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Dian Xiao Er', '36228 Golf Course Avenue', 10, 10);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('FoodKing', '59686 Rutledge Terrace', 24, 6);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Pizza Place', '11904 Pleasure Pass', 28, 4);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Corleone Corner', '015 Thompson Crossing', 24, 7);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Hainan Chicken', '84674 Alpine Alley', 15, 3);
+-- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Laksa Mama', '9 Crownhardt Terrace', 23, 7);
 
 -- --FDSManagers
 -- select NewFDSManager('Chadd Dumper','cdumper0','Ik62sY05Y','90075393','cdumper0@google.pl');
@@ -1454,7 +1443,7 @@ select NewPTRider('Nanette Pikesley','npikesley0','zpVoRZsHqYIe','96864928','npi
 -- select NewPTRider('Harman Quan','hquan5j','LWFYqeUVyp8c','93707897','hquan5j@github.com','191');
 
 -- --FTRiders
--- select NewFTRider('Kylen Paye','kpaye0','4UPvlfg','90011634','kpaye0@livejournal.com','578','7','3','1','3','3','1');
+select NewFTRider('Kylen Paye','kpaye0','4UPvlfg','90011634','kpaye0@livejournal.com','578','7','3','1','3','3','1');
 -- select NewFTRider('Maritsa De Avenell','mde1','FKCWYEu0pyo','93802009','mde1@columbia.edu','484','7','3','2','4','3','1');
 -- select NewFTRider('Natka Haldane','nhaldane2','xZob3VTni0','93974018','nhaldane2@cornell.edu','535','6','2','3','1','1','4');
 -- select NewFTRider('Erin Schuler','eschuler3','hW85h9IB1VQw','94644903','eschuler3@dot.gov','474','4','3','4','3','4','2');
