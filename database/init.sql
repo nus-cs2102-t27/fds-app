@@ -168,14 +168,11 @@ create or replace function NewCustomer(name varchar(30), username varchar(20), p
 RETURNS void AS $$
 with rows as (
     INSERT INTO Users(name, username, password, contact, email, date_joined)
-    VALUES (name, username, password, contact, email, now()) RETURNING uid
-),
-content as (
-    SELECT address AS address, card_number AS card_number, cvc AS cvc, default_payment AS default_payment
+    VALUES ($1, $2, $3, $4, $5, now()) RETURNING uid
 )
 INSERT INTO Customers(uid, address, card_number, cvc, default_payment, acc_points)
-    SELECT uid, address, card_number, cvc, default_payment, 0
-    FROM rows, content;
+    SELECT uid, $6, $7, $8, $9, 0
+    FROM rows;
 $$ language sql;
 
 create or replace function NewRestaurantStaff(name varchar(30), username varchar(20), password varchar(20), contact char(8), email varchar(40),
@@ -183,19 +180,18 @@ create or replace function NewRestaurantStaff(name varchar(30), username varchar
 RETURNS void AS $$
 with rows as (
     INSERT INTO Users(name, username, password, contact, email, date_joined)
-    VALUES (name, username, password, contact, email, now()) RETURNING uid
-),
-content as (SELECT rid AS rid)
+    VALUES ($1, $2, $3, $4, $5, now()) RETURNING uid
+)
 INSERT INTO RestaurantStaff(uid, rid)
-    SELECT uid, rid
-    FROM rows, content;
+    SELECT uid, $6
+    FROM rows;
 $$ language sql;
 
 create or replace function NewFDSManager(name varchar(30), username varchar(20), password varchar(20), contact char(8), email varchar(40))
 RETURNS void AS $$
 with rows as (
     INSERT INTO Users(name, username, password, contact, email, date_joined)
-    VALUES (name, username, password, contact, email, now()) RETURNING uid
+    VALUES ($1, $2, $3, $4, $5, now()) RETURNING uid
 )
 INSERT INTO FDSManagers(uid)
     SELECT uid FROM rows;
@@ -210,7 +206,7 @@ DECLARE
     workId int;
 BEGIN
     INSERT INTO Users(name, username, password, contact, email, date_joined)
-    VALUES (name, username, password, contact, email, now()) RETURNING uid INTO userId;
+    VALUES ($1, $2, $3, $4, $5, now()) RETURNING uid INTO userId;
     INSERT INTO Riders(uid) VALUES (userId);
     INSERT INTO FTRiders(uid, monthly_base_salary) VALUES (userId, $6);
     INSERT INTO WorkSchedules(wid) VALUES(DEFAULT) RETURNING wid INTO workId;
@@ -224,33 +220,30 @@ create or replace function NewPTRider(name varchar(30), username varchar(20), pa
 RETURNS void AS $$
 with rows as (
     INSERT INTO Users(name, username, password, contact, email, date_joined)
-    VALUES (name, username, password, contact, email, now()) RETURNING uid
-),
-ridercontent as (SELECT weekly_base_salary AS weekly_base_salary)
+    VALUES ($1, $2, $3, $4, $5, now()) RETURNING uid
+)
 INSERT INTO PTRiders(uid, weekly_base_salary)
-    SELECT uid, weekly_base_salary FROM rows, ridercontent;
+    SELECT uid, $6 FROM rows;
 $$ language sql;
 
 create or replace function NewFDSPromo(uid int, start_date date, end_date date, promo_type int, discount int)
 RETURNS void AS $$
 with rows as (
     INSERT INTO Promos(start_date, end_date, promo_type, discount)
-    VALUES (start_date, end_date, promo_type, discount) RETURNING pid
-),
-content as (SELECT uid AS uid)
+    VALUES ($2, $3, $4, $5) RETURNING pid
+)
 INSERT INTO FDSPromos(pid, uid)
-    SELECT pid, uid FROM rows, content;
+    SELECT pid, $1 FROM rows;
 $$ language sql;
 
 create or replace function NewRPromo(uid int, start_date date, end_date date, promo_type int, discount int)
 RETURNS void AS $$
 with rows as (
     INSERT INTO Promos(start_date, end_date, promo_type, discount)
-    VALUES (start_date, end_date, promo_type, discount) RETURNING pid
-),
-content as (SELECT uid AS uid)
+    VALUES ($2, $3, $4, $5) RETURNING pid
+)
 INSERT INTO RPromos(pid, uid)
-    SELECT pid, uid FROM rows, content;
+    SELECT pid, $1 FROM rows;
 $$ language sql;
 
 create or replace function NewFTWorkSchedule(uid int, day_option smallint, D1 smallint, D2 smallint,
@@ -258,22 +251,18 @@ create or replace function NewFTWorkSchedule(uid int, day_option smallint, D1 sm
 RETURNS void AS $$
 with rows as (
     INSERT INTO WorkSchedules(wid) VALUES(DEFAULT) RETURNING wid
-),
-content as (SELECT uid AS uid, day_option AS day_option, D1 AS D1,
-            D2 AS D2, D3 AS D3, D4 AS D4, D5 AS D5, now() AS date_created)
+)
 INSERT INTO FTWorkSchedules(wid, uid, day_option, D1, D2, D3, D4, D5, date_created)
-    SELECT wid, uid, day_option, D1, D2, D3, D4, D5, date_created FROM rows, content;
+    SELECT wid, $1, $2, $3, $4, $5, $6, $7, now() FROM rows;
 $$ language sql;
 
 create or replace function NewPTWorkSchedule(uid int, start_time timestamp, end_time timestamp)
 RETURNS void AS $$
 with rows as (
     INSERT INTO WorkSchedules(wid) VALUES(DEFAULT) RETURNING wid
-),
-content as (SELECT uid AS uid, start_time AS start_time,
-            end_time AS end_time, now() as date_created)
+)
 INSERT INTO PTWorkSchedules(wid, uid, start_time, end_time, date_created)
-    SELECT wid, uid, start_time, end_time, date_created FROM rows, content;
+    SELECT wid, $1, $2, $3, now() FROM rows;
 $$ language sql;
 
 create or replace function RemoveFood(fid int)
@@ -310,12 +299,12 @@ $$ language sql;
 
 create or replace function AccPoints(oid int)
 RETURNS numeric AS $$
-    SELECT ROUND(Price(oid), 0);
+    SELECT ROUND(Price($1), 0);
 $$ language sql;
 
 create or replace function getCustomerByOrder(oid int)
 RETURNS int AS $$
-SELECT uid FROM Orders WHERE oid = oid
+SELECT uid FROM Orders WHERE oid = $1
 $$ language sql;
 
 create or replace function AddPointsByOrder(oid int)
@@ -325,7 +314,7 @@ DECLARE
     points int;
     current_points int;
 BEGIN
-    SELECT getCustomerByOrder(oid), AccPoints(oid) INTO customer, points;
+    SELECT getCustomerByOrder($1), AccPoints($1) INTO customer, points;
     SELECT acc_points INTO current_points FROM Customers WHERE uid = customer;
     UPDATE Customers
     SET acc_points = current_points + points
@@ -333,17 +322,43 @@ BEGIN
 END
 $$ language plpgsql;
 
+create or replace function UsedPoints(oid int)
+RETURNS int AS $$
+    SELECT used_points FROM Orders WHERE oid = $1
+$$ language sql;
+
+create or replace function DeletePointsByOrder(oid int)
+RETURNS void AS $$
+DECLARE
+    customer int;
+    points int;
+    current_points int;
+BEGIN
+    SELECT getCustomerByOrder($1), UsedPoints($1) INTO customer, points;
+    SELECT acc_points INTO current_points FROM Customers WHERE uid = customer;
+    UPDATE Customers
+    SET acc_points = current_points - points
+    WHERE uid = customer;
+END
+$$ language plpgsql;
+
+create or replace function ModifyPointsByOrder(oid int)
+RETURNS void AS $$
+    SELECT AddPointsByOrder($1);
+    SELECT DeletePointsByOrder($1);
+$$ language sql;
+
 create or replace function NewOrder(uid int, location varchar(60), pid int, payment_type int, used_points int, foods hstore)
 RETURNS void AS $$
 with rows as (
     INSERT INTO Orders(uid, location, pid, order_time, payment_type, used_points)
-    VALUES (uid, location, pid, now(), payment_type, used_points) RETURNING oid
+    VALUES ($1, $2, $3, now(), $4, $5) RETURNING oid
 ),
 content as (
     INSERT INTO FoodOrders(fid, oid, qty)
-        SELECT key::int, oid, value::int FROM rows, each(foods) RETURNING oid
+        SELECT key::int, oid, value::int FROM rows, each($6) RETURNING oid
 )
-SELECT AddPointsByOrder((SELECT oid FROM content order by oid desc LIMIT 1));
+SELECT ModifyPointsByOrder((SELECT oid FROM content ORDER BY oid DESC LIMIT 1));
 $$ language sql;
 
 drop function if exists LastFiveLocations(int);
@@ -507,7 +522,7 @@ create constraint trigger same_restaurant_trigger
 -- values ("TAMPINES ROAD", 6372817462739572, 233, 0, 0)
 
 -- -- Customers
-select NewCustomer('Joya Saunter','jsaunter0','rT4kVKbcju','95492674','jsaunter0@cbsnews.com','3 Ronald Regan Street','2151899168688168','338','1');
+select NewCustomer('Joya Saunter','jsaunter0','password','95492674','jsaunter0@cbsnews.com','3 Ronald Regan Street','2151899168688168','338','1');
 -- select NewCustomer('Marcus Splevings','msplevings1','rTMwwI','90094778','msplevings1@ask.com','0511 Shopko Parkway','9177743529610093','641','0');
 -- select NewCustomer('Fraze Mont','fmont2','gB3LdsBY2o','98563720','fmont2@whitehouse.gov','05 Russell Avenue','9682891473181828','455','0');
 -- select NewCustomer('Miguela Vasichev','mvasichev3','zM5qAXVukHx','96507786','mvasichev3@loc.gov','97550 Kipling Avenue','8087102548227046','157','0');
