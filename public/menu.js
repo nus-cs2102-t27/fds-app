@@ -5,6 +5,15 @@ const quantity = {};
 $("#rid-input").val(rid);
 $("#restaurant-name").load(`/api/res/${rid}/name`);
 
+$.ajax("/api/cust/locations", { dataType: "json" }).done(locations => {
+    locations.forEach(l => {
+        $("#five-last-locations").append(`
+            <option>${l.lastfivelocations}</option>
+            <option>test<option
+        `)
+    });
+})
+
 function updateTotalCost() {
     let total = 0;
     for (let fid in quantity) {

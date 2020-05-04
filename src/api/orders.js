@@ -20,6 +20,8 @@ const getOrdersQuery = `SELECT oid, order_time, Restaurants.name as restaurant, 
 const getFoodInOrderQuery = `SELECT * FROM Food NATURAL JOIN FoodOrders WHERE oid = $1`;
 const addReviewQuery = `UPDATE Orders SET review = $2 WHERE oid = $1`;
 const addRatingQuery = `UPDATE Deliveries SET rating = $2 WHERE oid = $1`;
+const addOrderQuery = `SELECT NewOrder($1, $2, $3, $4, $5, $6)`;
+const getUserDefaultPayment = `SELECT default_payment FROM Customers WHERE uid = $1`;
 ordRouter.get("/all", async (req, res) => {
     const { rows: orderRows } = await pgPool.query(getOrdersQuery, [req.cookies.uid]);
     const queries = orderRows.map((order) => pgPool.query(getFoodInOrderQuery, [order.oid]));
@@ -41,9 +43,41 @@ ordRouter.get("/review", async (req, res) => {
 })
 
 ordRouter.post("/", async (req, res) => {
-	console.log(req.cookies.uid);
-    console.log(req.body);
-    
+    const { location } = req.body;
+    let { usedpoints, promo, payment } = req.body;
+    const foods = {};
+    for (const fid in req.body) {
+        if (!isNaN(fid) && req.body[fid] !== '0') {
+            foods[fid] = req.body[fid];
+        }
+    }
+
+    if (!promo) {
+        promo = null;
+    }
+
+    if (!usedpoints) {
+        usedpoints = 0;
+    }
+
+    if (payment === 2) { // if payment is Default
+        payment = getDefaultPayment(req.cookies.uid);
+    }
+
+    let hstore = "";
+    let isFirst = true;
+
+    for (const food in foods) {
+        const string = '"' + food + '"=>"' + foods[food] + '"';
+        if (isFirst) {
+            isFirst = false;
+            hstore = string;
+        } else {
+            hstore = hstore.concat(',' + string);
+        }
+    }
+
+    await pgPool.query(addOrderQuery, [req.cookies.uid, location, promo, payment, usedpoints, hstore]);
 	res.sendStatus(201);
 });
 
@@ -54,5 +88,10 @@ ordRouter.post("/makereview", async (req, res) => {
     res.redirect('/app/review-success.html');
     return;
 });
+
+async function getDefaultPayment(uid) {
+    const { rows } = await pgPool.query(getUserDefaultPayment, [uid]);
+    return rows[0].default_payment;
+}
 
 module.exports = ordRouter;
