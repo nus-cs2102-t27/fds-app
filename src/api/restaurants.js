@@ -23,10 +23,7 @@ resRouter.get("/:rid", async (req, res) => {
 });
 
 resRouter.get("/:rid/deliveryfee", async (req, res) => {
-    console.log(req.params.rid);
     const { rows } = await pgPool.query(getDeliveryFeeQuery, [req.params.rid]);
-    console.log(rows);
-    console.log(rows[0].delivery_fee);
     res.send(String(rows[0].delivery_fee));
 });
 

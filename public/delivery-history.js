@@ -2,7 +2,6 @@ const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 function formatDate(date) {
-    console.log("test)");
     var year = date.getFullYear(),
         month = monthNames[date.getMonth()];
         day = date.getDate(),

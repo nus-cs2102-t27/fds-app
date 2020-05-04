@@ -63,14 +63,10 @@ delRouter.post("/loghours", async (req, res) => {
             await client.query('BEGIN');
             for (const shift in shifts) {
                 const queryText = `SELECT NewPTWorkSchedule($1, $2, $3)`;
-                console.log("before query", shift);
-                console.log(shifts[shift]["start"], shifts[shift]["end"]);
                 await client.query(queryText, [req.cookies.uid, shifts[shift]["start"], shifts[shift]["end"]]);
-                console.log("after query");
             }
             await client.query('COMMIT');
         } catch (e) {
-            console.log(e);
             await client.query('ROLLBACK');
         } finally {
             client.release();
