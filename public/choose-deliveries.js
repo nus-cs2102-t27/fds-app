@@ -42,6 +42,7 @@ $.ajax("/api/del/orders", { dataType: "json" }).done(orders => {
                 }
               </div>
             </div>
+            <hr>
         `);
     })
   });

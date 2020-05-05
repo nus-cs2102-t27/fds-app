@@ -48,6 +48,7 @@ $.ajax("/api/ord/review", { dataType: "json" }).done(orders => {
                 </select></div>
               </form>
             </div>
+            <hr>
         `);
         // $("#review").append(`
         //     <tr>
