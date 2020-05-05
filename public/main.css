@@ -372,3 +372,9 @@ table.shift-table td input {
     margin-right: 0;
     margin-top: 10px;
 }
+
+.restaurants-grid {
+    display: grid;
+    grid-gap: 2px 24px;
+    grid-template-columns: auto auto;
+}
