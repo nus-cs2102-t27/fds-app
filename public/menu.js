@@ -2,6 +2,7 @@ const rid = (new URL(location.href)).searchParams.get("rid");
 const prices = {};
 const quantity = {};
 let deliveryFee = 0.0;
+let acc_points = 0;
 
 $("#rid-input").val(rid);
 $("#restaurant-name").load(`/api/res/${rid}/name`);
@@ -22,26 +23,40 @@ function updateTotalCost() {
     $("#total-price").html(total.toFixed(2));
 }
 
-// can load it somewhere first?? thats what i tried but then i think i screwed up
+$("#min-amt").load(`/api/res/${rid}/minamt`);
+
 $.ajax(`/api/res/${rid}/deliveryfee`).done(fee => {
     deliveryFee = parseFloat(fee);
     $("#delivery-fee").text(deliveryFee.toFixed(2));
     updateTotalCost();
 });
 
-$("#acc-points").load(`/api/cust/points`);
+$.ajax("/api/cust/points").done(points => {
+    acc_points = points;
+    console.log(deliveryFee);
+    console.log(acc_points);
+    $("#acc-points").text(acc_points);
+    $("#points").append(`
+        <input type="number" class="text-input-field" name="usedpoints" min=0 max=${Math.min(acc_points, deliveryFee * 100)} placeholder="Optional"></input>`
+    );
+});
         
 $.ajax("/api/menu/" + rid, { dataType: "json" }).done(menu => {
     menu.forEach(food => {
 
         prices[food.fid] = food.price;
-        
         $("#food").append(`
-            <tr id="row-${food.fid}">
-              <td>${food.name}</td>
-              <td>$${food.price}</td>
-              <td><input id="input-${food.fid}" class="number-input" type="number" name="${food.fid}" min=0 max=${food.food_left} step=1 value=0></input></td>
-            </tr>
+            ${food.food_left === '0' ? 
+                `<tr>
+                   <td>${food.name} <span class="text-danger">(unavailable)</span></td>
+                   <td>$${food.price}</td>
+                   <td><input disabled id="input-${food.fid}" class="number-input" type="number" name="${food.fid}" min=0 max=${food.food_left} step=1 value=0></input></td>
+                 </tr>` :
+                `<tr id="row-${food.fid}">
+                   <td>${food.name}</td>
+                   <td>$${food.price}</td>
+                   <td><input id="input-${food.fid}" class="number-input" type="number" name="${food.fid}" min=0 max=${food.food_left} step=1 value=0></input></td>
+                 </tr>`}
         `)
 
         $("#input-" + food.fid).change(() => {

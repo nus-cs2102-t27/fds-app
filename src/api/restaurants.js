@@ -6,6 +6,7 @@ const resRouter = express.Router();
 const getRestaurantsQuery = "SELECT rid, name FROM Restaurants";
 const getRestaurantQuery = "SELECT * FROM Restaurants WHERE rid = $1";
 const getDeliveryFeeQuery = "SELECT delivery_fee FROM Restaurants WHERE rid = $1";
+const getMinAmtQuery = "SELECT min_amt_threshold FROM Restaurants WHERE rid = $1";
 const getRestaurantFromStaff = `SELECT name, rid FROM RestaurantStaff NATURAL JOIN Restaurants
                                 WHERE uid = $1`;
 const getFoodInOrderQuery = `SELECT * FROM Food NATURAL JOIN FoodOrders WHERE oid = $1`;
@@ -73,6 +74,11 @@ resRouter.get("/:rid", async (req, res) => {
 resRouter.get("/:rid/deliveryfee", async (req, res) => {
     const { rows } = await pgPool.query(getDeliveryFeeQuery, [req.params.rid]);
     res.send(String(rows[0].delivery_fee));
+});
+
+resRouter.get("/:rid/minamt", async (req, res) => {
+    const { rows } = await pgPool.query(getMinAmtQuery, [req.params.rid]);
+    res.send(String(rows[0].min_amt_threshold.toFixed(2)));
 });
 
 resRouter.get("/:rid/reviews", async (req, res) => {
