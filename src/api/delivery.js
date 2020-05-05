@@ -1,5 +1,7 @@
 const express = require("express");
 const pgPool = require("../pg-pool");
+const userUtil = require("../util/userUtil");
+const getRedirectionForUserType = userUtil.getRedirectionForUserType;
 
 const delRouter = express.Router();
 
@@ -107,11 +109,15 @@ delRouter.post("/loghours", async (req, res) => {
 });
 
 delRouter.post("/choose", async (req, res) => {
+    try {
     const { oid } = req.body;
     await pgPool.query(chooseOrderQuery, [oid, req.cookies.uid]);
-    res.redirect('/app/rider.html');
+    res.redirect();
     return;
-})
+    } catch (e) {
+        console.log(e);
+    }
+});
 
 delRouter.get("/all", async (req, res) => {
     const { rows: deliveryRows } = await pgPool.query(getDeliveriesQuery, [req.cookies.uid]);
@@ -202,21 +208,21 @@ delRouter.post("/t2", async (req, res) => {
     const { rows } = await pgPool.query(getCurrentDeliveryOrderQuery, [req.cookies.uid]);
     const order = rows[0].oid;
     await pgPool.query(updateT2Query, [order]);
-    res.redirect('/app/rider.html');
+    res.redirect(getRedirectionForUserType(req.cookies.role));
 });
 
 delRouter.post("/t3", async (req, res) => {
     const { rows } = await pgPool.query(getCurrentDeliveryOrderQuery, [req.cookies.uid]);
     const order = rows[0].oid;
     await pgPool.query(updateT3Query, [order]);
-    res.redirect('/app/rider.html');
+    res.redirect(getRedirectionForUserType(req.cookies.role));
 });
 
 delRouter.post("/t4", async (req, res) => {
     const { rows } = await pgPool.query(getCurrentDeliveryOrderQuery, [req.cookies.uid]);
     const order = rows[0].oid;
     await pgPool.query(updateT4Query, [order]);
-    res.redirect('/app/rider.html');
+    res.redirect(getRedirectionForUserType(req.cookies.role));
 });
 
 delRouter.post("/collect", async (req, res) => {
