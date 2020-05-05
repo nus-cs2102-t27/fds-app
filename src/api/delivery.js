@@ -109,14 +109,10 @@ delRouter.post("/loghours", async (req, res) => {
 });
 
 delRouter.post("/choose", async (req, res) => {
-    try {
     const { oid } = req.body;
     await pgPool.query(chooseOrderQuery, [oid, req.cookies.uid]);
-    res.redirect();
+    res.redirect(getRedirectionForUserType(req.cookies.role));
     return;
-    } catch (e) {
-        console.log(e);
-    }
 });
 
 delRouter.get("/all", async (req, res) => {
