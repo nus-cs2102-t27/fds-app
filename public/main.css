@@ -187,18 +187,13 @@ table.shift-table td input {
 .choose-delivery-table .choose-header,
 .choose-delivery-table .choose-row {
     width: 100%;
-    padding-bottom: 35px;
+    padding-bottom: 6px;
 }
 
 .choose-delivery-table .choose-header,
 .choose-delivery-table .choose-row,
 .choose-delivery-table .choose-row .choose-form {
-/* .choose-delivery-table .choose-row .review-food-map .review-food-item { */
     display: flex;
-}
-
-/* .choose-delivery-table .choose-row .review-food-map .review-food-item {
-    justify-content: space-between; */
 }
 
 .choose-delivery-table .d-order-column,
@@ -214,7 +209,7 @@ table.shift-table td input {
 }
 
 .choose-delivery-table .d-order-column {
-    width: 20%;
+    width: 15%;
 }
 
 .choose-delivery-table .d-restaurant-column {
@@ -222,7 +217,7 @@ table.shift-table td input {
 }
 
 .choose-delivery-table .d-food-column {
-    width: 20%;
+    width: 30%;
 }
 
 .choose-delivery-table .d-address-column {
@@ -230,11 +225,70 @@ table.shift-table td input {
 }
 
 .choose-delivery-table .d-take-column {
-    width: 20%;
+    width: 15%;
 }
 
 .choose-form {
-    width: 20%;
+    width: 15%;
+}
+
+.menu-table {
+    width: 1000px;
+}
+
+.menu-table .menu-header {
+    font-weight: bold;
+    width: 100%;
+}
+
+
+.menu-table .menu-header,
+.menu-table .menu-row {
+    width: 100%;
+    padding-bottom: 6px;
+}
+
+.menu-table .menu-header,
+.menu-table .menu-row,
+.menu-table .menu-row .choose-form {
+    display: flex;
+}
+
+.menu-table .m-name-column,
+.menu-table .m-category-column,
+.menu-table .m-price-column,
+.menu-table .m-limit-column,
+.menu-table .m-sold-column,
+.menu-table .m-remove-column {
+    padding: 4px;
+}
+
+.menu-table .m-name-column {
+    width: 25%;
+}
+
+.menu-table .m-category-column {
+    width: 15%;
+}
+
+.menu-table .m-price-column {
+    width: 15%;
+}
+
+.menu-table .m-limit-column {
+    width: 15%;
+}
+
+.menu-table .m-sold-column {
+    width: 15%;
+}
+
+.menu-table .m-remove-column {
+    width: 15%;
+}
+
+.menu-form {
+    width: 10%;
 }
 
 .break-20 {
@@ -304,4 +358,17 @@ table.shift-table td input {
 .submit-btn {
     margin: 10px;
     min-width: 100px;
+}
+
+.new-food-group {
+    display: grid;
+    grid-gap: 12px 36px;
+    grid-template-columns: auto 1fr;
+}
+
+.new-food-group .submit-btn {
+    grid-column-end: span 2;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 10px;
 }

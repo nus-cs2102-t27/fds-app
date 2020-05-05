@@ -6,10 +6,17 @@ const resRouter = express.Router();
 const getRestaurantsQuery = "SELECT rid, name FROM Restaurants";
 const getRestaurantQuery = "SELECT * FROM Restaurants WHERE rid = $1";
 const getDeliveryFeeQuery = "SELECT delivery_fee FROM Restaurants WHERE rid = $1";
+const getRestaurantFromStaff = `SELECT name FROM RestaurantStaff NATURAL JOIN Restaurants
+                                WHERE uid = $1`;
 
 resRouter.get("/all", async (req, res) => {
     const { rows } = await pgPool.query(getRestaurantsQuery);
     res.send(rows);
+});
+
+resRouter.get("/name", async (req, res) => {
+    const { rows } = await pgPool.query(getRestaurantFromStaff, [req.cookies.uid]);
+    res.send(rows[0].name);
 });
 
 resRouter.get("/:rid", async (req, res) => {
