@@ -3,25 +3,28 @@ const pgPool = require("../pg-pool");
 
 const ordRouter = express.Router();
 
-const getUnreviewedOrdersQuery = `SELECT oid, order_time, Restaurants.name as restaurant, SUM(price * qty) AS total_price
-                                FROM FoodOrders NATURAL JOIN Food NATURAL JOIN Orders
-                                INNER JOIN Restaurants
-                                ON Food.rid = Restaurants.rid
-                                WHERE uid = $1 AND review IS NULL AND oid IN (
-                                    SELECT oid FROM Deliveries
-                                )
-                                GROUP BY oid, order_time, Restaurants.name`;
-const getOrdersQuery = `SELECT oid, order_time, Restaurants.name as restaurant, review, SUM(price * qty) AS total_price
-                        FROM FoodOrders NATURAL JOIN Food NATURAL JOIN Orders
-                        INNER JOIN Restaurants
-                        ON Food.rid = Restaurants.rid
-                        WHERE uid = $1
-                        GROUP BY oid, order_time, Restaurants.name, review`;
+const getUnreviewedOrdersQuery = 
+    `SELECT oid, order_time, Restaurants.name as restaurant, SUM(price * qty) AS total_price
+     FROM FoodOrders NATURAL JOIN Food NATURAL JOIN Orders
+     INNER JOIN Restaurants
+     ON Food.rid = Restaurants.rid
+     WHERE uid = $1 AND review IS NULL AND oid IN (
+         SELECT oid FROM Deliveries
+     )
+     GROUP BY oid, order_time, Restaurants.name`;
+const getOrdersQuery = 
+    `SELECT oid, order_time, Restaurants.name as restaurant, review, SUM(price * qty) AS total_price
+     FROM FoodOrders NATURAL JOIN Food NATURAL JOIN Orders
+     INNER JOIN Restaurants
+     ON Food.rid = Restaurants.rid
+     WHERE uid = $1
+     GROUP BY oid, order_time, Restaurants.name, review`;
 const getFoodInOrderQuery = `SELECT * FROM Food NATURAL JOIN FoodOrders WHERE oid = $1`;
 const addReviewQuery = `UPDATE Orders SET review = $2 WHERE oid = $1`;
 const addRatingQuery = `UPDATE Deliveries SET rating = $2 WHERE oid = $1`;
 const addOrderQuery = `SELECT NewOrder($1, $2, $3, $4, $5, $6)`;
 const getUserDefaultPayment = `SELECT default_payment FROM Customers WHERE uid = $1`;
+
 ordRouter.get("/all", async (req, res) => {
     const { rows: orderRows } = await pgPool.query(getOrdersQuery, [req.cookies.uid]);
     const queries = orderRows.map((order) => pgPool.query(getFoodInOrderQuery, [order.oid]));
@@ -40,7 +43,7 @@ ordRouter.get("/review", async (req, res) => {
     }
 
     res.send(orderRows);
-})
+});
 
 ordRouter.post("/", async (req, res) => {
     const { location } = req.body;
@@ -78,7 +81,7 @@ ordRouter.post("/", async (req, res) => {
     }
 
     await pgPool.query(addOrderQuery, [req.cookies.uid, location, promo, payment, usedpoints, hstore]);
-	res.sendStatus(201);
+    res.redirect('/app/order-success.html');
 });
 
 ordRouter.post("/makereview", async (req, res) => {

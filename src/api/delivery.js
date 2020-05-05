@@ -22,9 +22,9 @@ const getOrdersQuery =
          SELECT DISTINCT oid FROM Deliveries
      )
      ORDER BY order_time ASC`;
-const getCurrentOrderQuery =
+const getCurrentDeliveryOrderQuery =
     `SELECT * FROM Deliveries WHERE uid = $1
-     AND ((t2 IS NULL) OR (t3 IS NULL) OR (t4 IS NULL))`;
+     AND collected IS NULL`;
 const chooseOrderQuery = 
     `INSERT INTO Deliveries(oid, uid, t1)
      VALUES ($1, $2, now())`;
@@ -40,6 +40,16 @@ const updateT4Query =
     `UPDATE Deliveries
      SET t4 = now()
      WHERE oid = $1`;
+const updateCollectedQuery =
+    `UPDATE Deliveries
+     SET collected = True
+     WHERE oid = $1`;
+const getCurrentCustOrderQuery =
+    `SELECT * FROM Orders o LEFT OUTER JOIN Deliveries d
+     ON o.oid = d.oid
+     WHERE o.uid = $1 AND collected IS NULL
+     ORDER BY o.oid DESC
+     LIMIT 1`;
 
 delRouter.post("/loghours", async (req, res) => {
     const shifts = {};
@@ -124,7 +134,7 @@ delRouter.get("/orders", async (req, res) => {
 });
 
 delRouter.get("/status", async (req, res) => {
-    const { rows } = await pgPool.query(getCurrentOrderQuery, [req.cookies.uid]);
+    const { rows } = await pgPool.query(getCurrentDeliveryOrderQuery, [req.cookies.uid]);
     if (rows.length === 0) {
         res.send("No current delivery");
         return;
@@ -146,28 +156,75 @@ delRouter.get("/status", async (req, res) => {
         res.send("Travelling to delivery address");
         return;
     }
+
+    if (!order.collected) {
+        res.send("Waiting for customer to collect order");
+        return;
+    }
 });
 
+delRouter.get("/custstatus", async (req, res) => {
+    const { rows } = await pgPool.query(getCurrentCustOrderQuery, [req.cookies.uid]);
+    if (rows.length === 0) {
+        res.send("No current order");
+        return;
+    }
+
+    const order = rows[0];
+
+    if (!order.t1) {
+        res.send("Assigning rider to delivery");
+        return;
+    }
+
+    if (!order.t2) {
+        res.send("Rider is on their way to the restaurant");
+        return;
+    }
+
+    if (!order.t3) {
+        res.send("Rider is waiting for order at the restaurant");
+        return;
+    }
+
+    if (!order.t4) {
+        res.send("Rider is on their way to your delivery address");
+        return;
+    }
+
+    if (!order.collected) {
+        res.send("Your delivery has arrived!");
+        return;
+    }
+})
+
 delRouter.post("/t2", async (req, res) => {
-    const { rows } = await pgPool.query(getCurrentOrderQuery, [req.cookies.uid]);
+    const { rows } = await pgPool.query(getCurrentDeliveryOrderQuery, [req.cookies.uid]);
     const order = rows[0].oid;
     await pgPool.query(updateT2Query, [order]);
     res.redirect('/app/rider.html');
 });
 
 delRouter.post("/t3", async (req, res) => {
-    const { rows } = await pgPool.query(getCurrentOrderQuery, [req.cookies.uid]);
+    const { rows } = await pgPool.query(getCurrentDeliveryOrderQuery, [req.cookies.uid]);
     const order = rows[0].oid;
     await pgPool.query(updateT3Query, [order]);
     res.redirect('/app/rider.html');
 });
 
 delRouter.post("/t4", async (req, res) => {
-    const { rows } = await pgPool.query(getCurrentOrderQuery, [req.cookies.uid]);
+    const { rows } = await pgPool.query(getCurrentDeliveryOrderQuery, [req.cookies.uid]);
     const order = rows[0].oid;
     await pgPool.query(updateT4Query, [order]);
     res.redirect('/app/rider.html');
 });
+
+delRouter.post("/collect", async (req, res) => {
+    const { rows } = await pgPool.query(getCurrentCustOrderQuery, [req.cookies.uid]);
+    const order = rows[0].oid;
+    await pgPool.query(updateCollectedQuery, [order]);
+    res.redirect('/app/customer.html');
+})
 
 function getWorkTime(string) {
     const period = string.slice(string.length - 2); // am OR pm
