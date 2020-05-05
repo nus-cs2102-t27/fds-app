@@ -16,26 +16,33 @@ function formatDate(date) {
 }
 
 $.ajax("/api/del/orders", { dataType: "json" }).done(orders => {
+  $.ajax("/api/del/status").done(status => {
     orders.forEach(order => {
         $("#current_orders").append(`
-            <tr>
-              <td>${formatDate(new Date(order.order_time))}</td>
-              <td>${order.restaurant}</td>
-              <td>
-                <table class="table-borderless">
+            <div class="choose-row">
+              <div class="d-order-column">${formatDate(new Date(order.order_time))}</div>
+              <div class="d-restaurant-column">${order.restaurant}</div>
+              <div class="d-food-column">
+                <div class="review-food-map">
                   ${order.food.map((f) => `
-                    <tr>
-                      <td>${f.qty} x ${f.name}</td>
-                      <td>${f.price}</td>
-                    </tr>
+                    <div class="review-food-item">
+                      <div>${f.qty} x ${f.name}</div>
+                      <div>${f.price}</div>
+                    </div>
                   `).join("")}
-                </table>
-              </td>
-              <td>${order.location}</td>
-              <td>
-                <input type="button" class="btn btn-primary submit-btn" value="Select">
-              </td>
-            </tr>
+                </div>
+              </div>
+              <div class="d-address-column">${order.location}</div>
+              <div class="d-take-column">
+                ${status === "No current delivery" ? `
+                  <form class="choose-form" action="/api/del/choose" method="post">
+                    <input type="hidden" name="oid" value="${order.oid}">
+                    <input type="submit" class="btn btn-primary submit-btn" value="Select">
+                  </form>` : ""
+                }
+              </div>
+            </div>
         `);
     })
+  });
 })

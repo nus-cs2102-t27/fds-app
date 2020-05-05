@@ -14,17 +14,26 @@
   <body>
     <h1>Current Orders</h1><br>
     <div class="d-flex flex-column align-items-center w-75">
-        <table class="table normal-table" id="current_orders">
-          <tr>
-            <th>Order Time</th>
-            <th>Restaurant</th>
-            <th>Food</th>
-            <th>Delivery Address</th>
-            <th>Take</th>
-          </tr>
-        </table>
-        <input type="button" onclick="window.location = '/app/rider.html'" class="btn btn-primary submit-btn" value="Back">
+      <div class="choose-delivery-table" id="current_orders">
+        <div class="choose-header">
+          <div class="d-order-column">Order Time</div>
+          <div class="d-restaurant-column">Restaurant</div>
+          <div class="d-food-column">Food</div>
+          <div class="d-address-column">Delivery Address</div>
+          <div class="d-take-column">Take</div>
+        </div>
       </div>
+      <!-- <table class="table normal-table" id="current_orders">
+        <tr>
+          <th>Order Time</th>
+          <th>Restaurant</th>
+          <th>Food</th>
+          <th>Delivery Address</th>
+          <th>Take</th>
+        </tr>
+      </table> -->
+      <a href='/app/rider.html' class="btn btn-primary submit-btn">Back</a>
+    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
