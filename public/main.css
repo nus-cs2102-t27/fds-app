@@ -187,6 +187,7 @@ table.shift-table td input {
 .choose-delivery-table .choose-header,
 .choose-delivery-table .choose-row {
     width: 100%;
+    padding-bottom: 35px;
 }
 
 .choose-delivery-table .choose-header,
