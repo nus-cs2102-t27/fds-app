@@ -1,29 +1,33 @@
 const rid = (new URL(location.href)).searchParams.get("rid");
 const prices = {};
 const quantity = {};
+let deliveryFee = 0.0;
 
 $("#rid-input").val(rid);
 $("#restaurant-name").load(`/api/res/${rid}/name`);
 
 $.ajax("/api/cust/locations", { dataType: "json" }).done(locations => {
     locations.forEach(l => {
-        $("#five-last-locations").append(`
+        $("#last-five-locations").append(`
             <option>${l.lastfivelocations}</option>
-            <option>test<option
         `)
     });
 })
 
 function updateTotalCost() {
-    let total = 0;
+    let total = deliveryFee;
     for (let fid in quantity) {
         total += quantity[fid] * prices[fid];
     }
     $("#total-price").html(total.toFixed(2));
 }
-updateTotalCost();
 
-$("#delivery-fee").load(`/api/res/${rid}/deliveryfee`);
+// can load it somewhere first?? thats what i tried but then i think i screwed up
+$.ajax(`/api/res/${rid}/deliveryfee`).done(fee => {
+    deliveryFee = parseFloat(fee);
+    $("#delivery-fee").text(deliveryFee.toFixed(2));
+    updateTotalCost();
+});
 
 $("#acc-points").load(`/api/cust/points`);
         
@@ -36,7 +40,7 @@ $.ajax("/api/menu/" + rid, { dataType: "json" }).done(menu => {
             <tr id="row-${food.fid}">
               <td>${food.name}</td>
               <td>$${food.price}</td>
-              <td><input id="input-${food.fid}" class="number-input" type="number" name="${food.fid}" min=0 step=1 value=0></input></td>
+              <td><input id="input-${food.fid}" class="number-input" type="number" name="${food.fid}" min=0 max=${food.food_left} step=1 value=0></input></td>
             </tr>
         `)
 

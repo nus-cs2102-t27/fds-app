@@ -18,8 +18,10 @@
       <div class="delivery-box">
         <div class="fds-input-group">
           <label class="text-input-label" style="font-size: 18px; ">Delivery Address</label>
-          <select class="custom-select" id="last-five-locations" name="location" required>
-          </select>
+          <input class="address-dropdown" name="location" type="text" list="last-five-locations" required />
+          <datalist id="last-five-locations">
+          </datalist>
+            <!-- <input type="text" class="text-input-field" name="location"></input> -->
         </div>
       </div><br>
       <table class="table" id="food">
@@ -30,7 +32,7 @@
         </tr>
       </table>
       <div>
-        Delivery Fee: $<span id="delivery-fee"></span>.00
+        Delivery Fee: $<span id="delivery-fee"></span>
       </div>
       <div class="total-price">Total:  $<span id="total-price"></span></div>
       <div>

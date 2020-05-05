@@ -48,6 +48,57 @@ table.shift-table td input {
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
+.address-dropdown {
+    padding: 1px 3px;
+    width: 70%;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.review-table {
+    width: 1000px;
+}
+
+.review-table .review-header {
+    font-weight: bold;
+    width: 100%;
+}
+
+
+.review-table .review-header,
+.review-table .review-row {
+    width: 100%;
+}
+
+.review-table .review-header,
+.review-table .review-row,
+.review-table .review-row .review-form,
+.review-table .review-row .review-food-map .review-food-item {
+    display: flex;
+}
+
+.review-table .review-row .review-food-map .review-food-item {
+    justify-content: space-between;
+}
+
+.review-table .order-column,
+.review-table .restaurant-column,
+.review-table .food-column,
+.review-table .price-column,
+.review-table .review-column,
+.review-table .rating-column {
+    padding: 4px;
+}
+
+.review-table .food-column {
+    padding-right: 10px;
+}
+
+.review-table .order-column {
+    width: 10%;
+}
+
 .review-table {
     width: 1000px;
 }
@@ -121,6 +172,68 @@ table.shift-table td input {
 
 .review-table .review-form .rating-column {
     width: 37%;
+}
+
+.choose-delivery-table {
+    width: 1000px;
+}
+
+.choose-delivery-table .choose-header {
+    font-weight: bold;
+    width: 100%;
+}
+
+
+.choose-delivery-table .choose-header,
+.choose-delivery-table .choose-row {
+    width: 100%;
+}
+
+.choose-delivery-table .choose-header,
+.choose-delivery-table .choose-row,
+.choose-delivery-table .choose-row .choose-form {
+/* .choose-delivery-table .choose-row .review-food-map .review-food-item { */
+    display: flex;
+}
+
+/* .choose-delivery-table .choose-row .review-food-map .review-food-item {
+    justify-content: space-between; */
+}
+
+.choose-delivery-table .d-order-column,
+.choose-delivery-table .d-restaurant-column,
+.choose-delivery-table .d-food-column,
+.choose-delivery-table .d-address-column,
+.choose-delivery-table .d-take-column {
+    padding: 4px;
+}
+
+.choose-delivery-table .d-food-column {
+    padding-right: 10px;
+}
+
+.choose-delivery-table .d-order-column {
+    width: 20%;
+}
+
+.choose-delivery-table .d-restaurant-column {
+    width: 20%;
+}
+
+.choose-delivery-table .d-food-column {
+    width: 20%;
+}
+
+.choose-delivery-table .d-address-column {
+    width: 20%;
+}
+
+.choose-delivery-table .d-take-column {
+    width: 20%;
+}
+
+.choose-form {
+    width: 20%;
 }
 
 .break-20 {
