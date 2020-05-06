@@ -309,7 +309,7 @@ SELECT f.fid, rid, name, category, price, food_limit, isRemoved,
     COALESCE(food_limit - total_qty, food_limit) AS food_left
 FROM orders_today o RIGHT OUTER JOIN Food f
 ON o.fid = f.fid
-WHERE rid = $1;
+WHERE rid = $1 AND isRemoved = False;
 $$ language sql;
 
 create or replace function Price(oid int)
