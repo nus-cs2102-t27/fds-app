@@ -31,7 +31,6 @@ $.ajax("/api/ord/review", { dataType: "json" }).done(orders => {
                   `).join("")}
                 </div>
               </div>
-              <div class="price-column">${order.total_price}</div>
               <form class="review-form" action="/api/ord/makereview" method="post">
                 <div class="review-column">
                   <input type="hidden" name="oid" value="${order.oid}">
