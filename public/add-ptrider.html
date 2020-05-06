@@ -13,10 +13,10 @@
   </head>
   <body>
     <div class="align-center">
-      <h1>Customer Sign Up</h1><br>
+      <h1>Add Part-Time Rider</h1><br>
     </div>
     <div class="login-box">
-      <form class="login-form" action="/api/auth/cust" method="post">
+      <form class="login-form" action="/api/auth/ptrider" method="post">
         <div class="user-pass-container">
           <div class="fds-input-group">
             <label class="text-input-label">Full Name</label>
@@ -43,28 +43,13 @@
             <input type="text" class="text-input-field" name="email" required></input>
           </div>
           <div class="fds-input-group">
-            <label class="text-input-label">Address</label>
-            <input type="text" class="text-input-field" name="address" placeholder="1234 Main St" required></input>
-          </div>
-          <div class="fds-input-group">
-            <label class="text-input-label">Card Number</label>
-            <input type="text" class="text-input-field" name="cardNumber" required></input>
-          </div>
-          <div class="fds-input-group">
-            <label class="text-input-label">CVC</label>
-            <input type="text" class="text-input-field" name="cvc" required></input>
-          </div>
-          <div class="fds-input-group">
-            <label class="text-input-label">Default Payment</label>
-            <select class="custom-select" name="defaultPayment" required>
-              <option value=0>Cash</option>
-              <option value=1>Card</option>
-            </select>
+            <label class="text-input-label">Weekly Base Salary</label>
+            <input type="numeric" class="text-input-field" name="weekly_base_salary" required></input>
           </div>
         </div>
         <div>
           <input class="btn btn-primary submit-btn" type="submit" value="Create Account">
-          <a href='/app/login.html' class="btn btn-secondary submit-btn">Back</a>
+          <a href='/app/add-user.html' class="btn btn-secondary submit-btn">Back</a>
         </div>
       </form>
     </div>
