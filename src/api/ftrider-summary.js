@@ -2,7 +2,7 @@ const express = require("express");
 const pgPool = require("../pg-pool");
 
 const riderSumRouter = express.Router();
-
+/*
 const SalaryQuery =
     `SELECT ((EXTRACT(year FROM age(CURRENT_DATE, U.date_joined)) * 12 + EXTRACT(month FROM age(CURRENT_DATE, U.date_joined)) + 10) * F.monthly_base_salary)
     + ((SELECT COUNT(*) FROM Deliveries where uid = $1) * 2))
@@ -10,7 +10,7 @@ const SalaryQuery =
     FROM Users U, FTRiders F
     WHERE U.uid = $1`;
 
-const HoursWorkedQuery = 
+*/
       
 
 riderSumRouter.get("/ptrider", async (req, res) => {
