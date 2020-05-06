@@ -32,6 +32,9 @@ const getRestaurantsByCategoryQuery =
     `SELECT DISTINCT r.name, r.rid 
      FROM Food f INNER JOIN Restaurants r ON f.rid = r.rid 
      WHERE category = $1`;
+const NEW_RESTAURANT_QUERY = 
+    `INSERT INTO Restaurants(name, address, min_amt_threshold, delivery_fee)
+     VALUES ($1, $2, $3, $4)`;
 
 resRouter.get("/all", async (req, res) => {
     const { rows } = await pgPool.query(getRestaurantsQuery);
@@ -71,6 +74,19 @@ resRouter.get("/categories", async (req, res) => {
     const { rows } = await pgPool.query(getCategoriesQuery);
     console.log(rows);
     res.send(rows);
+});
+
+resRouter.post("/new", async (req, res) => {
+    const {
+        name,
+        address,
+        min_amt_threshold,
+        delivery_fee
+    } = req.body;
+
+    await pgPool.query(NEW_RESTAURANT_QUERY, [name, address, min_amt_threshold, delivery_fee]);
+    res.redirect('/app/create-res-success.html');
+    return;
 });
 
 resRouter.get("/cat/:cat", async (req, res) => {
