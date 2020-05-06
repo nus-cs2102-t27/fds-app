@@ -1,3 +1,6 @@
+*.sw[a-p]
+*~
+
 # Logs
 logs
 *.log
