@@ -9,7 +9,7 @@ function formatDate(date) {
     return `${day} ${month} ${year}`;
 }
 
-$.ajax("/api/promo/allres", { dataType: "json"}).done(promos => {
+$.ajax("/api/promo/allfds", { dataType: "json"}).done(promos => {
     promos.forEach(promo => {
         $("#promos").append(`
             <tr>
