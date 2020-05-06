@@ -24,12 +24,18 @@ sumRouter.get("/cust", async (req, res) => {
                 customers[custIndex].orders = orders[ordIndex].orders;
             }
         }
+        if (!customers[custIndex].orders) {
+            customers[custIndex].orders = 0;
+        }
     }
     for (let custIndex in customers) {
         for (let costIndex in costs) {
             if (customers[custIndex].month === costs[costIndex].month) {
                 customers[custIndex].costs = costs[costIndex].costs;
             }
+        }
+        if (!customers[custIndex].costs) {
+            customers[custIndex].costs = 0;
         }
     }
     res.send(customers);
