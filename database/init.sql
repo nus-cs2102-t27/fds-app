@@ -294,18 +294,23 @@ SET isRemoved = True
 WHERE fid = $1;
 $$ language sql;
 
+-- For this function, use 'SELECT * FROM GetFood(xxx);'
+-- Not doing so will result in the returned table becoming a tuple
 create or replace function GetFood(rid int)
 RETURNS TABLE(fid int, rid int, name varchar(30), category varchar(30), price decimal(38,2),
-food_limit int, isRemoved boolean, qtyLeft int) AS $$
-DECLARE
-    c int;
-BEGIN
-    SELECT fid, sum(qty)
-    SELECT f.*, f.food_limit - 
-    FROM FoodOrders fo NATURAL JOIN Food f
-    WHERE fo.fid = $1;
-END;
-$$ language plpgsql;
+food_limit int, isRemoved boolean, food_left bigint) AS $$
+with orders_today as (
+    SELECT fid, sum(qty) as total_qty
+    FROM FoodOrders NATURAL JOIN Orders
+    WHERE order_time::DATE = now()::DATE
+    GROUP BY fid
+)
+SELECT f.fid, rid, name, category, price, food_limit, isRemoved,
+    COALESCE(food_limit - total_qty, food_limit) AS food_left
+FROM orders_today o RIGHT OUTER JOIN Food f
+ON o.fid = f.fid
+WHERE rid = $1;
+$$ language sql;
 
 create or replace function Price(oid int)
 RETURNS numeric AS $$
