@@ -26,6 +26,12 @@ const getRestaurantReviews =
      INNER JOIN Users u ON o.uid = u.uid
      WHERE rid = $1 AND review IS NOT NULL
      GROUP BY u.name, o.oid, order_time, review`;
+const getCategoriesQuery =
+    `SELECT DISTINCT category FROM Food`;
+const getRestaurantsByCategoryQuery =
+    `SELECT DISTINCT r.name, r.rid 
+     FROM Food f INNER JOIN Restaurants r ON f.rid = r.rid 
+     WHERE category = $1`;
 
 resRouter.get("/all", async (req, res) => {
     const { rows } = await pgPool.query(getRestaurantsQuery);
@@ -60,6 +66,22 @@ resRouter.get("/resreviews", async (req, res) => {
 
     res.send(orderRows);
 });
+
+resRouter.get("/categories", async (req, res) => {
+    const { rows } = await pgPool.query(getCategoriesQuery);
+    console.log(rows);
+    res.send(rows);
+});
+
+resRouter.get("/cat/:cat", async (req, res) => {
+    if (req.params.cat === "all") {
+        const { rows } = await pgPool.query(getRestaurantsQuery);
+        res.send(rows);
+    } else {
+        const { rows } = await pgPool.query(getRestaurantsByCategoryQuery, [req.params.cat]);
+        res.send(rows);
+    }
+})
 
 resRouter.get("/:rid", async (req, res) => {
     const { rows } = await pgPool.query(getRestaurantQuery, [req.params.rid]);
