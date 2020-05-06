@@ -57,6 +57,7 @@ create table Promos (
     start_date  date  NOT NULL,
     end_date    date  NOT NULL,
     promo_type  integer,
+    discount_type integer,
     discount    integer
 );
 
@@ -94,6 +95,7 @@ create table Orders (
     payment_type integer,
     used_points integer,
     review      varchar(150),
+    discount    varchar(50),
     foreign key (uid) references Customers on delete cascade,
     foreign key (pid) references Promos
 );
@@ -234,8 +236,8 @@ $$ language sql;
 create or replace function NewFDSPromo(uid int, start_date date, end_date date, promo_type int, discount int)
 RETURNS void AS $$
 with rows as (
-    INSERT INTO Promos(start_date, end_date, promo_type, discount)
-    VALUES ($2, $3, $4, $5) RETURNING pid
+    INSERT INTO Promos(start_date, end_date, promo_type, discount_type, discount)
+    VALUES ($2, $3, 0, $4, $5) RETURNING pid
 )
 INSERT INTO FDSPromos(pid, uid)
     SELECT pid, $1 FROM rows;
@@ -244,8 +246,8 @@ $$ language sql;
 create or replace function NewRPromo(uid int, start_date date, end_date date, promo_type int, discount int)
 RETURNS void AS $$
 with rows as (
-    INSERT INTO Promos(start_date, end_date, promo_type, discount)
-    VALUES ($2, $3, $4, $5) RETURNING pid
+    INSERT INTO Promos(start_date, end_date, promo_type, discount_type, discount)
+    VALUES ($2, $3, 1, $4, $5) RETURNING pid
 )
 INSERT INTO RPromos(pid, uid)
     SELECT pid, $1 FROM rows;
@@ -343,15 +345,15 @@ RETURNS void AS $$
     SELECT DeletePointsByOrder($1);
 $$ language sql;
 
-create or replace function NewOrder(uid int, location varchar(60), pid int, payment_type int, used_points int, foods hstore)
+create or replace function NewOrder(uid int, location varchar(60), pid int, payment_type int, used_points int, discount varchar(50), foods hstore)
 RETURNS void AS $$
 with rows as (
-    INSERT INTO Orders(uid, location, pid, order_time, payment_type, used_points)
-    VALUES ($1, $2, $3, now(), $4, $5) RETURNING oid
+    INSERT INTO Orders(uid, location, pid, order_time, payment_type, used_points, discount)
+    VALUES ($1, $2, $3, now(), $4, $5, $6) RETURNING oid
 ),
 content as (
     INSERT INTO FoodOrders(fid, oid, qty)
-        SELECT key::int, oid, value::int FROM rows, each($6) RETURNING oid
+        SELECT key::int, oid, value::int FROM rows, each($7) RETURNING oid
 )
 SELECT ModifyPointsByOrder((SELECT oid FROM content ORDER BY oid DESC LIMIT 1));
 $$ language sql;
@@ -945,8 +947,8 @@ insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values 
 -- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Hainan Chicken', '84674 Alpine Alley', 15, 3);
 -- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Laksa Mama', '9 Crownhardt Terrace', 12, 7);
 
--- -- --FDSManagers
--- select NewFDSManager('Chadd Dumper','cdumper0','Ik62sY05Y','90075393','cdumper0@google.pl');
+-- --FDSManagers
+select NewFDSManager('Chadd Dumper','cdumper0','password','90075393','cdumper0@google.pl');
 -- select NewFDSManager('Lemuel Dignan','ldignan1','fe4C1rQ6h','96155025','ldignan1@weibo.com');
 -- select NewFDSManager('Doe Pickerin','dpickerin2','6cVuU03no','95909190','dpickerin2@photobucket.com');
 -- select NewFDSManager('Theresa Tummasutti','ttummasutti3','cND5KOWN','96001329','ttummasutti3@mediafire.com');
@@ -1968,9 +1970,6 @@ insert into food(rid, name, category, price, food_limit, isRemoved) values (25, 
 --(9)130 - 157 (10)158 - 174 (11)175 - 192 (12)193 - 201 (13)202 - 218 (14)219 - 224 (15)225 - 243
 --(16)244 - 255 (17)256 - 264 (18)265 - 278 (19)279 - 299 (20)300 - 321 (21)322 - 335 (22)336 - 361
 --(23)362 - 377 (24)378 - 381 (25)382 - 395
---insert into Orders(uid, location, order_time, payment_type, used_points) values (, , '2020-05-01 10:00:00', , );
---insert into FoodOrders(fid, oid, qty) values (, , );
---NewOrder(uid int, location varchar(60), pid int, payment_type int, used_points int, foods hstore)
 
 insert into Orders(uid, location, order_time, payment_type, used_points) values (1, '3 Ronald Regan Street', '2020-04-20 10:03:00', 1, 0);
 insert into FoodOrders(fid, oid, qty) values (1, 1, 2);
