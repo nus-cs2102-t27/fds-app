@@ -6,6 +6,7 @@ const ord = require("./orders");
 const del = require("./delivery");
 const cust = require("./customer");
 const sum = require("./summary");
+const promo = require("./promo");
 
 const apiRouter = express.Router();
 
@@ -19,5 +20,6 @@ apiRouter.use("/ord", ord);
 apiRouter.use("/del", del);
 apiRouter.use("/cust", cust);
 apiRouter.use("/sum", sum);
+apiRouter.use("/promo", promo);
 
 module.exports = apiRouter;
