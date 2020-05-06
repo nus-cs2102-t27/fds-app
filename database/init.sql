@@ -932,30 +932,30 @@ select NewCustomer('Joya Saunter','jsaunter0','password','95492674','jsaunter0@c
 
 -- -- Restaurants
 insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Pizza World', '86486 Melrose Street', 14, 3);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Chocolate Land', '40 Independence Terrace', 13, 5);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Chicken Corner', '7304 Gale Trail', 15, 5);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Fish Delights', '46 Spohn Junction', 15, 4);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Tavern Place', '8342 Mitchell Parkway', 14, 3);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Indian Delights', '733 Main Junction', 15, 5);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Pizza Hut', '65205 Manufacturers Terrace', 15, 7);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('KFC', '8371 Granby Circle', 12, 3);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Foodie Paradise', '39 Anhalt Pass', 12, 2);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Chinese World', '110 Montana Way', 10, 5);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Gourmet Land', '6 Monument Circle', 14, 6);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Lim Eatery', '58 Mayer Junction', 16, 4);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Koi', '9929 School Parkway', 16, 5);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Llao Llao', '8 Lakeland Court', 12, 3);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('MacDonalds', '9051 Golden Leaf Way', 12, 2);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Wendys', '7 Shasta Court', 14, 5);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Fried Chicken Specials', '85 Springs Drive', 15, 6);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Arnolds', '9460 Maple Wood Crossing', 16, 8);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Canton Paradise', '34 Dakota Terrace', 11, 8);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Dian Xiao Er', '36228 Golf Course Avenue', 10, 10);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('FoodKing', '59686 Rutledge Terrace', 15, 6);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Pizza Place', '11904 Pleasure Pass', 12, 4);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Corleone Corner', '015 Thompson Crossing', 15, 7);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Hainan Chicken', '84674 Alpine Alley', 15, 3);
--- insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Laksa Mama', '9 Crownhardt Terrace', 12, 7);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Chocolate Land', '40 Independence Terrace', 13, 5);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Chicken Corner', '7304 Gale Trail', 15, 5);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Fish Delights', '46 Spohn Junction', 15, 4);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Tavern Place', '8342 Mitchell Parkway', 14, 3);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Indian Delights', '733 Main Junction', 15, 5);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Pizza Hut', '65205 Manufacturers Terrace', 15, 7);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('KFC', '8371 Granby Circle', 12, 3);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Foodie Paradise', '39 Anhalt Pass', 12, 2);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Chinese World', '110 Montana Way', 10, 5);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Gourmet Land', '6 Monument Circle', 14, 6);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Lim Eatery', '58 Mayer Junction', 16, 4);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Koi', '9929 School Parkway', 16, 5);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Llao Llao', '8 Lakeland Court', 12, 3);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('MacDonalds', '9051 Golden Leaf Way', 12, 2);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Wendys', '7 Shasta Court', 14, 5);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Fried Chicken Specials', '85 Springs Drive', 15, 6);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Arnolds', '9460 Maple Wood Crossing', 16, 8);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Canton Paradise', '34 Dakota Terrace', 11, 8);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Dian Xiao Er', '36228 Golf Course Avenue', 10, 10);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('FoodKing', '59686 Rutledge Terrace', 15, 6);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Pizza Place', '11904 Pleasure Pass', 12, 4);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Corleone Corner', '015 Thompson Crossing', 15, 7);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Hainan Chicken', '84674 Alpine Alley', 15, 3);
+insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Laksa Mama', '9 Crownhardt Terrace', 12, 7);
 
 -- --FDSManagers
 select NewFDSManager('Chadd Dumper','cdumper0','password','90075393','cdumper0@google.pl');
