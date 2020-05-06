@@ -40,14 +40,25 @@
       <div class="total-price">Total:  $<span id="total-price"></span></div>
       <div>
         Accumulated Points: <span id="acc-points"></span> (100 points - $1 off delivery fee)
-      </div>
-      <div class="fds-input-group" id="points">
-        <label class="text-input-label" style="font-size: 18px; ">Redeem Points</label>
+      </div><br>
+      <table class="table" id="promos">
+        <tr>
+          <th>Promo ID</th>
+          <th>Discount</th>
+        </tr>
+      </table>
+      <div class="fds-input-group">
+        <label class="text-input-label" style="font-size: 18px; ">Discount Type</label>
+        <select class="custom-select" name="discount_type">
+          <option selected value='None'>Choose...</option>
+          <option value='Promo ID'>Promo ID</option>
+          <option value='Redeem Points'>Redeem Points</option>
+        </select>
       </div>
       <div class="fds-input-group">
-        <label class="text-input-label" style="font-size: 18px; ">Promo ID</label>
-        <input type="text" class="text-input-field" name="promo" placeholder="Optional"></input>
-      </div>
+        <label class="text-input-label" style="font-size: 18px; ">Promo ID/Redeem Points</label>
+        <input type="text" class="text-input-field" name="discount_value" placeholder="Optional"></input>
+      </div><br>
       <div class="fds-input-group">
         <label class="text-input-label" style="font-size: 18px; ">Payment</label>
         <select class="custom-select" name="payment" required>

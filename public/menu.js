@@ -72,4 +72,19 @@ $.ajax("/api/menu/" + rid, { dataType: "json" }).done(menu => {
             }    
         })
     })
+});
+
+$.ajax("/api/menu/promos", { dataType: "json "}).done(promos => {
+    promos.forEach(promo => {
+        $("#promos").append(`
+            <tr>
+              <td>${promo.pid}</td>
+              <td>${promo.promo_type === 0 ?
+                        `Delivery fee - 
+                        ${promo.discount_type === 0 ? `$${promo.discount}` :
+                            `${promo.discount}%`} off` :
+                        `Restaurant Promo - 
+                        ${promo.discount}% off all items`}
+        `);
+    })
 })

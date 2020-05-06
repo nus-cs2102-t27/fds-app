@@ -109,7 +109,7 @@ function getTableForUserType(userType) {
         case "staff":
             return "RestaurantStaff";
         case "manager":
-            return "FDSManager";
+            return "FDSManagers";
         case "ptrider":
         case "ftrider":
         case "rider":

@@ -40,6 +40,7 @@ $.ajax("/api/ord/all", { dataType: "json" }).done(orders => {
                 </table>
               </td>
               <td>${formatReview(order.review)}</td>
+              <td>${order.delivery_fee}</td>
               <td>$${order.total_price}</td>
             </tr>
         `);

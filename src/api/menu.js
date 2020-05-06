@@ -3,6 +3,7 @@ const pgPool = require("../pg-pool");
 
 const menuRouter = express.Router();
 
+const getPromosQuery = `SELECT * FROM Promos WHERE start_date < now() AND end_date > now()`;
 const getFoodQuery = `SELECT * FROM GetFood($1)`;
 const getFoodForStaff = 
     `SELECT f.fid, name, category, price, food_limit, 
@@ -42,6 +43,12 @@ menuRouter.post("/new", async (req, res) => {
     const { name, category, price, food_limit } = req.body;
     await pgPool.query(AddFood, [rid, name, category, parseFloat(price), parseInt(food_limit)]);
     res.redirect('/app/modify-menu.html');
+});
+
+menuRouter.get("/promos", async (req, res) => {
+    const { rows } = await pgPool.query(getPromosQuery);
+    console.log(rows);
+    res.send(rows);
 })
 
 menuRouter.get("/:rid", async (req, res) => {

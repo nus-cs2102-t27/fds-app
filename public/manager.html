@@ -12,26 +12,22 @@
     <title>Food Delivery Service Portal</title>
   </head>
   <body>
-    <h1>Your past orders</h1><br>
-    <div class="d-flex flex-column align-items-center w-75">
-        <table class="table" id="orders">
-          <tr>
-            <th>Order</th>
-            <th>Restaurant</th>
-            <th>Food</th>
-            <th>Review</th>
-            <th>Delivery Fee</th>
-            <th>Total Price</th>
-          </tr>
-        </table>
-        <input type="button" onclick="window.location = '/app/customer.html'" class="btn btn-primary submit-btn" value="Back">
-      </div>
+    <h1>Welcome, <span id="manager-name"></span>!</h1><br>
+
+    <a href="/app/manager.html">Add Users</a><br>
+    <a href="/app/manager.html">Add Restaurants</a><br>
+    <a href="/app/manager.html">Add FDS Promos</a><br>
+    <a href="/app/fds-summary.html">Summary Information</a>
+
+    <br>
+
+    <a href='/app/login.html' class="btn btn-primary submit-btn">Sign Out</a>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script src="/app/order-history.js"></script>
+    <script src="/app/staff.js"></script>
   </body>
 </html>

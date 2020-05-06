@@ -12,19 +12,17 @@
     <title>Food Delivery Service Portal</title>
   </head>
   <body>
-    <h1>Your past orders</h1><br>
+    <h1>Customer Summary</h1><br>
     <div class="d-flex flex-column align-items-center w-75">
-        <table class="table" id="orders">
+        <table class="table" id="cust">
           <tr>
-            <th>Order</th>
-            <th>Restaurant</th>
-            <th>Food</th>
-            <th>Review</th>
-            <th>Delivery Fee</th>
-            <th>Total Price</th>
+            <th>Month</th>
+            <th>Number of Customers</th>
+            <th>Number of Orders</th>
+            <th>Total Cost</th>
           </tr>
         </table>
-        <input type="button" onclick="window.location = '/app/customer.html'" class="btn btn-primary submit-btn" value="Back">
+        <a href='/app/customer.html' class="btn btn-primary submit-btn">Back</a>
       </div>
 
     <!-- Optional JavaScript -->
@@ -32,6 +30,6 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script src="/app/order-history.js"></script>
+    <script src="/app/cust-summary.js"></script>
   </body>
 </html>

@@ -5,6 +5,7 @@ const menu = require("./menu");
 const ord = require("./orders");
 const del = require("./delivery");
 const cust = require("./customer");
+const sum = require("./summary");
 
 const apiRouter = express.Router();
 
@@ -17,5 +18,6 @@ apiRouter.use("/menu", menu);
 apiRouter.use("/ord", ord);
 apiRouter.use("/del", del);
 apiRouter.use("/cust", cust);
+apiRouter.use("/sum", sum);
 
 module.exports = apiRouter;
