@@ -85,7 +85,6 @@ table.shift-table td input {
 .review-table .order-column,
 .review-table .restaurant-column,
 .review-table .food-column,
-.review-table .price-column,
 .review-table .review-column,
 .review-table .rating-column {
     padding: 4px;
@@ -128,18 +127,17 @@ table.shift-table td input {
 .review-table .order-column,
 .review-table .restaurant-column,
 .review-table .food-column,
-.review-table .price-column,
 .review-table .review-column,
 .review-table .rating-column {
     padding: 4px;
 }
 
 .review-table .food-column {
-    padding-right: 10px;
+    padding-right: 30px;
 }
 
 .review-table .order-column {
-    width: 10%;
+    width: 15;
 }
 
 .review-table .restaurant-column {
@@ -147,11 +145,7 @@ table.shift-table td input {
 }
 
 .review-table .food-column {
-    width: 25%;
-}
-
-.review-table .price-column {
-    width: 10%;
+    width: 30%;
 }
 
 .review-table .review-column {

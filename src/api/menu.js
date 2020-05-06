@@ -47,7 +47,6 @@ menuRouter.post("/new", async (req, res) => {
 
 menuRouter.get("/promos", async (req, res) => {
     const { rows } = await pgPool.query(getPromosQuery);
-    console.log(rows);
     res.send(rows);
 })
 

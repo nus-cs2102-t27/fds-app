@@ -41,7 +41,8 @@ $.ajax("/api/ord/all", { dataType: "json" }).done(orders => {
               </td>
               <td>${formatReview(order.review)}</td>
               <td>${order.delivery_fee}</td>
-              <td>$${order.total_price}</td>
+              <td>$${order.discount}</td>
+              <td>$${(parseFloat(order.total_price) + parseFloat(order.delivery_fee) - (order.discount === "  -" ? 0 : parseFloat(order.discount))).toFixed(2)}</td>
             </tr>
         `);
     })
