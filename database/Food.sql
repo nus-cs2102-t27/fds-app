@@ -5,3 +5,46 @@ insert into food(rid, name, category, price, food_limit) values (1, 'Dessert Piz
 insert into food(rid, name, category, price, food_limit) values (1, 'Drumlets 6pc', 'Sides', 10, 100);
 insert into food(rid, name, category, price, food_limit) values (1, 'Wings 6pc', 'Pizza', 10, 100);
 insert into food(rid, name, category, price, food_limit) values (1, 'Coca-Cola', 'Drinks', 2.70, 100);
+--
+insert into food(rid, name, category, price, food_limit) values (2, 'Hershey White Chocolate', 'Chocolate', 2.50, 150);
+insert into food(rid, name, category, price, food_limit) values (2, 'Hershey Dark Chocolate', 'Chocolate', 2.50, 150);
+insert into food(rid, name, category, price, food_limit) values (2, 'Sour Power', 'Candy', 1.50, 300);
+insert into food(rid, name, category, price, food_limit) values (2, 'Pepsi', 'Beverage', 1.20, 200);
+insert into food(rid, name, category, price, food_limit) values (2, 'Pop Rocks', 'Candy', 0.90, 500);
+insert into food(rid, name, category, price, food_limit) values (2, 'Double Choc Chip Cookie', 'Cookie', 3, 40);
+insert into food(rid, name, category, price, food_limit) values (2, 'Kinder Bueno', 'Chocolate', 2.50, 100);
+insert into food(rid, name, category, price, food_limit) values (2, 'Toblerone', 'Chocolate', 2.50, 100);
+insert into food(rid, name, category, price, food_limit) values (2, 'Twisterz', 'Candy', 2, 200);
+insert into food(rid, name, category, price, food_limit) values (2, 'Sprite', 'Beverage', 1.20, 200);
+insert into food(rid, name, category, price, food_limit) values (2, 'Jellybeans', 'Candy', 0.5, 1500);
+insert into food(rid, name, category, price, food_limit) values (2, 'White Chocolate Cookie', 'Cookie', 3, 40);
+insert into food(rid, name, category, price, food_limit) values (2, 'Hershey Milk Chocolate', 'Chocolate', 2.30, 120);
+insert into food(rid, name, category, price, food_limit) values (2, 'Kit-Kat', 'Chocolate', 1.70, 150);
+insert into food(rid, name, category, price, food_limit) values (2, 'Chewing Gum', 'Candy', 0.7, 100);
+insert into food(rid, name, category, price, food_limit) values (2, '7-Up', 'Beverage', 1.2, 180);
+insert into food(rid, name, category, price, food_limit) values (2, 'Monster Sweet', 'Candy', 0.5, 1000);
+insert into food(rid, name, category, price, food_limit) values (2, 'Oatmeal Raisin Cookie', 'Cookie', 3.50, 30);
+--
+insert into food(rid, name, category, price, food_limit) values (3, 'Peri-Peri Fried Chicken', 'Chicken', 6, 200);
+insert into food(rid, name, category, price, food_limit) values (3, 'BBQ Chicken', 'Chicken', 6, 150);
+insert into food(rid, name, category, price, food_limit) values (3, 'Secret Sauce Chicken', 'Chicken', 6, 300);
+insert into food(rid, name, category, price, food_limit) values (3, 'Sweet N Sour Chicken', 'Chicken', 6, 100);
+insert into food(rid, name, category, price, food_limit) values (3, 'Chicken Sandwich', 'Sandwiches', 4, 40);
+insert into food(rid, name, category, price, food_limit) values (3, 'Double Chicken Sandwich', 'Sandwiches', 5.50, 30);
+insert into food(rid, name, category, price, food_limit) values (3, 'Fries', 'Sides', 2.50, 150);
+insert into food(rid, name, category, price, food_limit) values (3, 'Chicken Nuggets', 'Sides', 3, 75);
+insert into food(rid, name, category, price, food_limit) values (3, 'Popcorn Chicken', 'Sides', 3, 75);
+insert into food(rid, name, category, price, food_limit) values (3, 'Pepsi', 'Drinks', 1.50, 100);
+insert into food(rid, name, category, price, food_limit) values (3, 'Coco-Cola', 'Drinks', 1.50, 100);
+insert into food(rid, name, category, price, food_limit) values (3, 'Fresh Lemonade', 'Drinks', 2, 50);
+--
+insert into food(rid, name, category, price, food_limit) values (4, 'Grilled Salmon', 'Fish', 22, 40);
+insert into food(rid, name, category, price, food_limit) values (4, 'Pan-Seared Tuna', 'Fish', 20, 40);
+insert into food(rid, name, category, price, food_limit) values (4, 'Seared Sea Bass', 'Fish', 20, 40);
+insert into food(rid, name, category, price, food_limit) values (4, 'Baked Cod', 'Fish', 18, 40);
+insert into food(rid, name, category, price, food_limit) values (4, 'Chowder Soup', 'Sides', 5, 50);
+insert into food(rid, name, category, price, food_limit) values (4, 'Fish Sticks', 'Sides', 4, 30);
+insert into food(rid, name, category, price, food_limit) values (4, 'Crab Sticks', 'Sides', 4, 20);
+insert into food(rid, name, category, price, food_limit) values (4, 'Fizzy Lime', 'Drinks', 2, 100);
+insert into food(rid, name, category, price, food_limit) values (4, 'Tangy Orange', 'Drinks', 2, 100);
+insert into food(rid, name, category, price, food_limit) values (4, 'Sprtizy Lemon', 'Drinks', 2, 100);
