@@ -2,9 +2,9 @@ $.ajax(`/api/ftridersum/ftrider`, { dataType: "json" }).done(rows => {
     rows.forEach(row => {
         $("#ftrider").append(`
             <tr>
-              <td>${row.ordersThisMonth}</td>
-              <td>${row.hoursWorkedThisMonth}</td>
-              <td>${row.salary}</td>
+              <td>${row.monthly_orders}</td>
+              <td>${row.hours_worked}</td>
+              <td>${row.monthly_base_salary}</td>
               <td>${row.lifetime_salary}</td>
             </tr>
         `);
