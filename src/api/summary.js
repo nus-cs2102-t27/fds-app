@@ -25,16 +25,19 @@ const CostQuery =
     FROM Orders NATURAL JOIN FoodOrders NATURAL JOIN Food
     GROUP BY EXTRACT(month FROM order_time)`;
 
-const CustomerOrdersQuery = 
-    `SELECT EXTRACT(month FROM order_time) AS month, uid, COUNT(*) AS orders
-    FROM Orders
-    GROUP BY EXTRACT(month FROM order_time), uid
-    ORDER BY uid`;
-const CustomerCostQuery = 
-    `SELECT EXTRACT (month FROM order_time) AS month, uid, SUM(qty*price) AS costs
-    FROM Orders NATURAL JOIN FoodOrders NATURAL JOIN Food
-    GROUP BY EXTRACT(month FROM order_time), uid
-    ORDER BY uid`;
+const CustOrderSummaryQuery =
+    `WITH CO AS (
+        SELECT EXTRACT(month FROM order_time) AS month, uid, name, COUNT(*) AS orders
+        FROM Orders NATURAL JOIN Users
+        GROUP BY EXTRACT(month FROM order_time), uid, name
+        ORDER BY uid
+    ), CC AS (
+        SELECT EXTRACT (month FROM order_time) AS month, uid, SUM(qty*price) AS costs
+        FROM Orders NATURAL JOIN FoodOrders NATURAL JOIN Food
+        GROUP BY EXTRACT(month FROM order_time), uid
+        ORDER BY uid, month
+    )
+    SELECT uid, name, month, orders, costs FROM CO NATURAL JOIN CC`;
 
 const LocationOrdersQuery = 
     `SELECT EXTRACT (month FROM order_time) AS month, EXTRACT (day FROM order_time) AS day, 
@@ -43,14 +46,12 @@ const LocationOrdersQuery =
     GROUP BY EXTRACT (month FROM order_time), EXTRACT(day FROM order_time), EXTRACT(hour FROM order_time), location
     ORDER BY month, day, hour`;
 
-const RiderOrdersDeliveredQuery = 
-    `SELECT uid, EXTRACT(month FROM t1) as month, COUNT(*) AS orders_delivered
-    FROM Riders NATURAL JOIN Deliveries
-    GROUP BY uid, EXTRACT(month FROM t1)
-    ORDER BY uid`;
-
-const RiderHoursWorkedQuery = 
-    `WITH sch AS (SELECT uid, EXTRACT(month FROM start_time) as month,
+const RiderSummaryQuery = 
+    `WITH ROD AS (SELECT uid, name, EXTRACT(month FROM t1) as month, COUNT(*) AS orders_delivered
+    FROM Riders NATURAL JOIN Deliveries NATURAL JOIN Users
+    GROUP BY uid, EXTRACT(month FROM t1), name
+    ORDER BY uid
+    ), RHW AS (WITH sch AS (SELECT uid, EXTRACT(month FROM start_time) as month,
     SUM(DATE_PART('hour', end_time::timestamp - start_time::timestamp)) as hrs
     FROM Riders NATURAL JOIN PTWorkSchedules 
     GROUP BY uid, EXTRACT(month FROM start_time)
@@ -65,10 +66,8 @@ const RiderHoursWorkedQuery =
     ELSE 0
     END AS hrs
     FROM Riders, sch
-    ORDER BY uid`;
-
-const RiderSalaryQuery = 
-    `WITH sal AS (SELECT uid, EXTRACT(month FROM t1) AS month, monthly_base_salary + 2 * COUNT(*) AS monthly_salary
+    ORDER BY uid
+    ), RS AS (WITH sal AS (SELECT uid, EXTRACT(month FROM t1) AS month, monthly_base_salary + 2 * COUNT(*) AS monthly_salary
     FROM FTRiders NATURAL JOIN Deliveries GROUP BY uid, EXTRACT(month FROM t1)
     UNION
     SELECT uid, EXTRACT(month FROM t1) AS month, 4 * weekly_base_salary + 2 * COUNT(*) AS monthly_salary
@@ -84,21 +83,19 @@ const RiderSalaryQuery =
     ELSE 0
     END AS monthly_salary
     FROM Riders, sal
-    ORDER BY uid`;
-
-const RiderDeliveryTimeQuery = 
-    `SELECT R.uid, EXTRACT(month FROM t1) as month, COALESCE(COUNT(D.uid),0) AS orders_delivered,
+    ORDER BY uid
+    ), RD AS (SELECT R.uid, EXTRACT(month FROM t1) as month, COALESCE(COUNT(D.uid),0) AS orders_delivered,
     COALESCE(ROUND((SUM(DATE_PART('minute', t4::timestamp - t1::timestamp)) / COUNT(*))::numeric, 1),0) AS average_delivery_time
     FROM Riders R LEFT OUTER JOIN Deliveries D
     ON R.uid = D.uid
     GROUP BY R.uid, EXTRACT(month FROM t1)
-    ORDER BY R.uid`;
-
-const RiderRatingsQuery = 
-    `SELECT DISTINCT R.uid, COALESCE(D.rating, 'NIL') AS Ratings
+    ORDER BY R.uid
+    ), RR AS (SELECT DISTINCT R.uid, COALESCE(D.rating, 'NIL') AS ratings
     FROM Riders R LEFT OUTER JOIN Deliveries D
     ON R.uid = D.uid
-    ORDER BY R.uid`;
+    ORDER BY R.uid)
+    SELECT uid, name, month, orders_delivered, hrs AS hours_worked, average_delivery_time, monthly_salary, ratings
+    FROM ROD NATURAL JOIN RHW NATURAL JOIN RS NATURAL JOIN RD NATURAL JOIN RR`;
 
 sumRouter.get("/cust", async (req, res) => {
     const { rows: customers } = await pgPool.query(NewCustomersQuery);
@@ -127,21 +124,22 @@ sumRouter.get("/cust", async (req, res) => {
     res.send(customers);
 });
 
-sumRouter.get("custOrder", async(req, res) => {
-    const { rows: custOrdersNumber } = await pgPool.query(CustomerOrdersQuery);
-    const { rows: custOrdersCosts } = await pgPool.query(CustomerCostQuery);
+sumRouter.get("/custOrder", async(req, res) => {
+    const { rows: custOrdersNumber } = await pgPool.query(CustOrderSummaryQuery);
+    console.log(custOrdersNumber);
+    res.send(custOrdersNumber);
 });
 
-sumRouter.get("loc", async(req, res) => {
+sumRouter.get("/loc", async(req, res) => {
     const { rows: locationOrders } = await pgPool.query(LocationOrdersQuery);
+    console.log(locationOrders);
+    res.send(locationOrders);
 });
 
-sumRouter.get("rider", async(req, res) => {
-    const { rows: riderOrdersDel } = await pgPool.query(RiderOrdersDeliveredQuery);
-    const { rows: riderHoursWorked } = await pgPool.query(RiderHoursWorkedQuery);
-    const { rows: riderSalary } = await pgPool.query(RiderSalaryQuery);
-    const { rows: riderDelTime } = await pgPool.query(RiderDeliveryTimeQuery);
-    const { rows: riderRatings } = await pgPool.query(RiderRatingsQuery);
+sumRouter.get("/riderSumm", async(req, res) => {
+    const { rows: riderSummary } = await pgPool.query(RiderSummaryQuery);
+    console.log(riderSummary);
+    res.send(riderSummary);
 });
 
 function formatDate(date) {
