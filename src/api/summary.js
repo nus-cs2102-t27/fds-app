@@ -37,19 +37,18 @@ const CustomerCostQuery =
     ORDER BY uid`;
 
 const LocationOrdersQuery = 
-    `SELECT EXTRACT(hour FROM order_time) AS hour, location, COUNT(*) AS orders
+    `SELECT EXTRACT (month FROM order_time) AS month, EXTRACT (day FROM order_time) AS day, 
+    EXTRACT (hour FROM order_time) AS hour, location, COUNT(*) AS orders
     FROM Orders
-    GROUP BY EXTRACT(hour FROM order_time), location
-    ORDER BY location`;
+    GROUP BY EXTRACT (month FROM order_time), EXTRACT(day FROM order_time), EXTRACT(hour FROM order_time), location
+    ORDER BY month, day, hour`;
 
 const RiderOrdersDeliveredQuery = 
     `SELECT uid, EXTRACT(month FROM t1) as month, COUNT(*) AS orders_delivered
     FROM Riders NATURAL JOIN Deliveries
     GROUP BY uid, EXTRACT(month FROM t1)
     ORDER BY uid`;
-// SUM(DATE_PART('day', end_time::timestamp - start_time::timestamp) * 24 +
-// SELECT DATE_PART('day', '2020-05-05 18:00:00'::timestamp - '2020-05-05 12:00:00'::timestamp) * 24 + 
-//                 DATE_PART('hour', '2020-05-05 18:00:00'::timestamp - '2020-05-05 12:00:00'::timestamp) as hrs;
+
 const RiderHoursWorkedQuery = 
     `WITH sch AS (SELECT uid, EXTRACT(month FROM start_time) as month,
     SUM(DATE_PART('hour', end_time::timestamp - start_time::timestamp)) as hrs
@@ -126,6 +125,23 @@ sumRouter.get("/cust", async (req, res) => {
         }
     }
     res.send(customers);
+});
+
+sumRouter.get("custOrder", async(req, res) => {
+    const { rows: custOrdersNumber } = await pgPool.query(CustomerOrdersQuery);
+    const { rows: custOrdersCosts } = await pgPool.query(CustomerCostQuery);
+});
+
+sumRouter.get("loc", async(req, res) => {
+    const { rows: locationOrders } = await pgPool.query(LocationOrdersQuery);
+});
+
+sumRouter.get("rider", async(req, res) => {
+    const { rows: riderOrdersDel } = await pgPool.query(RiderOrdersDeliveredQuery);
+    const { rows: riderHoursWorked } = await pgPool.query(RiderHoursWorkedQuery);
+    const { rows: riderSalary } = await pgPool.query(RiderSalaryQuery);
+    const { rows: riderDelTime } = await pgPool.query(RiderDeliveryTimeQuery);
+    const { rows: riderRatings } = await pgPool.query(RiderRatingsQuery);
 });
 
 function formatDate(date) {
