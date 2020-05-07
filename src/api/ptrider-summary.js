@@ -34,11 +34,12 @@ const PTRiderSummaryQuery =
             AND U.uid = $1)
     ),
     HoursWorked as (
-        SELECT COUNT(*) * 8
+        SELECT SUM(EXTRACT(EPOCH FROM end_time - start_time) / 3600)
         AS hours_worked
-            FROM FTWorkSchedules
-            WHERE uid = $1
-            LIMIT 1
+        FROM PTWorkSchedules
+        WHERE uid = $1
+        AND start_time > current_date - interval '7 days'
+        LIMIT 1
     )
     SELECT lifetime_salary, weekly_base_salary, weekly_orders, hours_worked
     FROM LifetimeSalary, WeeklySalary, WeeklyOrders, HoursWorked`;
