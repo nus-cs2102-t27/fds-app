@@ -15,7 +15,7 @@
     <h1>Welcome, <span id="rid-name"></span>!</h1><br>
 
     <div style="font-size: 18px">
-      Working Now: <span id="work-status"></span>
+      Working Now: <span id="ftwork-status"></span>
     </div><br>
     <div style="font-size: 18px">
       Current Status: <span id="status"></span>
@@ -23,8 +23,20 @@
     <div id="rider-button"></div><br>
     <a href="/app/delivery-history.html">View past deliveries</a><br>
     <a href="/app/choose-deliveries.html" id="ft-work"></a><br>
-    <a href="/app/ftrider-summary-info.html">Your rider summary information</a>
 
+    <br>
+
+    <h5>My Rider Summary</h5><br>
+    <div class="summary-grid">
+      <label class="text-input-label">Orders completed this month</label>
+      <label class="text-input-label" id="ft-orders"></label>
+      <label class="text-input-label">Hours worked this month</label>
+      <label class="text-input-label" id="ft-hours"></label>
+      <label class="text-input-label">This month's salary (including base)</label>
+      <label class="text-input-label" id="ft-salary"></label>
+      <label class="text-input-label">Lifetime earnings</label>
+      <label class="text-input-label" id="ft-earnings"></label>
+    </div>
     <br>
 
     <a href='/app/login.html' class="btn btn-primary submit-btn">Sign Out</a>

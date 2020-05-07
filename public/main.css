@@ -381,3 +381,9 @@ table.shift-table td input {
     margin-top: 10px;
     width: 300px;
 }
+
+.summary-grid {
+    display: grid;
+    grid-gap: 3px 25px;
+    grid-template-columns: auto auto;
+}

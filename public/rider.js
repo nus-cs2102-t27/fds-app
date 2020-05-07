@@ -10,16 +10,34 @@ $.ajax("/api/del/status").done(s => {
 
 $.ajax("/api/rid/ftwork").done(status => {
     status ? $("#ft-work").append(`Start delivering!`) : "";
-    $("#work-status").append(`
+    $("#ft-work-status").append(`
         ${status ? "YES" : "NO"}
     `);
 });
 
 $.ajax("/api/rid/ptwork").done(status => {
     status ? $("#pt-work").append(`Start delivering!`) : "";
-    $("#work-status").append(`
+    $("#pt-work-status").append(`
         ${status ? "YES" : "NO"}
     `);
+});
+
+$.ajax(`/api/ftridersum/ftrider`, { dataType: "json" }).done(rows => {
+    rows.forEach(row => {
+        $("#ft-orders").text(row.monthly_orders);
+        $("#ft-hours").text(row.hours_worked);
+        $("#ft-salary").text(row.monthly_base_salary);
+        $("#ft-earnings").text(row.lifetime_salary);
+    })
+});
+
+$.ajax(`/api/ptridersum/ptrider`, { dataType: "json" }).done(rows => {
+    rows.forEach(row => {
+        $("#pt-orders").text(row.weekly_orders);
+        $("#pt-hours").text(row.hours_worked);
+        $("#pt-salary").text(row.weekly_base_salary);
+        $("#pt-earnings").text(row.lifetime_salary);
+    })
 });
 
 function getRiderButton(status) {
