@@ -67,7 +67,8 @@ const RiderSalaryQuery =
     `SELECT uid, EXTRACT(month FROM date_joined) AS month
     CASE
     WHEN uid in (SELECT uid FROM FTRiders)
-    THEN (SELECT monthly_base_salary FROM FTRiders F WHERE uid = F.uid)`;
+    THEN (SELECT monthly_base_salary FROM FTRiders F WHERE uid = F.uid)
+    FROM uid NATURAL JOIN Riders NATURAL JOIN FTWorkSchedules NATURAL JOIN PTWorkSchedules`;
 const RiderDeliveryTimeQuery = 0;
 const RiderRatingsQuery = 0;
 const RiderAverageRatingsQuery = 0;
