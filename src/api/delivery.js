@@ -11,7 +11,7 @@ const getDeliveriesQuery =
      NATURAL JOIN FoodOrders NATURAL JOIN Food
      INNER JOIN Restaurants R
      ON Food.rid = R.rid
-     WHERE t4 IS NOT NULL
+     WHERE collected = True
      GROUP BY oid, rating, t1, t2, t3, t4, R.name
      HAVING uid = $1`;
 const getFoodInOrderQuery = `SELECT * FROM Food NATURAL JOIN FoodOrders WHERE oid = $1`;
