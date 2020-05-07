@@ -13,6 +13,8 @@ const CostQuery =
     `SELECT EXTRACT(month FROM order_time) AS month, SUM(qty*price) AS costs
     FROM Orders NATURAL JOIN FoodOrders NATURAL JOIN Food
     GROUP BY EXTRACT(month FROM order_time)`;
+const StatusQuery =
+    `SELECT AtLeastFiveUsers()`;
 
 sumRouter.get("/cust", async (req, res) => {
     const { rows: customers } = await pgPool.query(NewCustomersQuery);
@@ -39,6 +41,11 @@ sumRouter.get("/cust", async (req, res) => {
         }
     }
     res.send(customers);
+});
+
+sumRouter.get("/status", async (req, res) => {
+    const { rows } = await pgPool.query(StatusQuery);
+    res.send(rows[0].atleastfiveusers);
 });
 
 function formatDate(date) {
