@@ -15,6 +15,6 @@ custRouter.get("/points", async (req, res) => {
 custRouter.get("/locations", async (req, res) => {
     const { rows } = await pgPool.query(lastFiveDeliveryLocations, [req.cookies.uid]);
     res.send(rows);
-})
+});
 
 module.exports = custRouter;
