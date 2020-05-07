@@ -3,9 +3,9 @@ $.ajax(`/api/monthsum/orders`, { dataType: "json" }).done(rows => {
         $("#staffmonthlysummary").append(`
             <tr>
               <td>${monthNames[row.month]}</td>
-              <td>${row.customers}</td>
               <td>${row.orders}</td>
               <td>$${row.costs}</td>
+              <td>${row.name}</td>
             </tr>
         `);
     })
