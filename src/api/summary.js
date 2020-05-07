@@ -28,32 +28,46 @@ const CostQuery =
 const CustomerOrdersQuery = 
     `SELECT EXTRACT(month FROM order_time) AS month, uid, COUNT(*) AS orders
     FROM Orders
-    GROUP BY EXTRACT(month FROM order_time), uid`;
+    GROUP BY EXTRACT(month FROM order_time), uid
+    ORDER BY uid`;
 const CustomerCostQuery = 
     `SELECT EXTRACT (month FROM order_time) AS month, uid, SUM(qty*price) AS costs
     FROM Orders NATURAL JOIN FoodOrders NATURAL JOIN Food
-    GROUP BY EXTRACT(month FROM order_time), uid`;
+    GROUP BY EXTRACT(month FROM order_time), uid
+    ORDER BY uid`;
 
 const LocationOrdersQuery = 
     `SELECT EXTRACT(hour FROM order_time) AS hour, location, COUNT(*) AS orders
     FROM Orders
-    GROUP BY EXTRACT(hour FROM order_time), location`;
+    GROUP BY EXTRACT(hour FROM order_time), location
+    ORDER BY location`;
 
 const RiderOrdersDeliveredQuery = 
     `SELECT uid, EXTRACT(month FROM t1) as month, COUNT(*) AS orders_delivered
     FROM Riders NATURAL JOIN Deliveries
-    GROUP BY uid, EXTRACT(month FROM t1)`;
+    GROUP BY uid, EXTRACT(month FROM t1)
+    ORDER BY uid`;
+
+// SELECT DATE_PART('day', '2020-05-05 18:00:00'::timestamp - '2020-05-05 12:00:00'::timestamp) * 24 + 
+//                 DATE_PART('hour', '2020-05-05 18:00:00'::timestamp - '2020-05-05 12:00:00'::timestamp) as hrs;
 const RiderHoursWorkedQuery = 
     `SELECT uid, EXTRACT(month FROM date_joined) AS month,
     CASE
-    WHEN uid in (select * from FTRiders)
+    WHEN uid in (SELECT uid FROM FTRiders)
     THEN (40 * 4)
-    WHEN uid in (select * from PTRiders)
-    THEN (SELECT SUM(DATEDIFF(hour, start_time, end_time)) FROM PTWorkSchedules P
-            WHERE uid = P.uid AND EXTRACT(month FROM date_joined) = month)
+    WHEN uid in (SELECT uid FROM PTRiders)
+    THEN SUM((SELECT DATE_PART('day', start_time::timestamp - end_time::timestamp) * 24 + 
+                    DATE_PART('hour', start_time::timestamp - end_time::timestamp)
+                    FROM PTWorkSchedules P
+                    WHERE uid = P.uid))
+    else 0
     END AS Hours_Worked
-    FROM Riders NATURAL JOIN FTWorkSchedules NATURAL JOIN PTWorkSchedules`;
-const RiderSalaryQuery = 0;
+    FROM Users NATURAL JOIN Riders NATURAL JOIN FTWorkSchedules NATURAL JOIN PTWorkSchedules`;
+const RiderSalaryQuery = 
+    `SELECT uid, EXTRACT(month FROM date_joined) AS month
+    CASE
+    WHEN uid in (SELECT uid FROM FTRiders)
+    THEN (SELECT monthly_base_salary FROM FTRiders F WHERE uid = F.uid)`;
 const RiderDeliveryTimeQuery = 0;
 const RiderRatingsQuery = 0;
 const RiderAverageRatingsQuery = 0;
