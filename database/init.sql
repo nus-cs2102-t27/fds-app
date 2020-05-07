@@ -262,12 +262,72 @@ INSERT INTO PTWorkSchedules(wid, uid, start_time, end_time, date_created)
     SELECT wid, $1, $2, $3, now() FROM rows;
 $$ language sql;
 
-create or replace function RemoveFood(fid int)
-RETURNS void AS $$
-UPDATE Food
-SET isRemoved = True
-WHERE fid = $1;
-$$ language sql;
+create or replace function FtWorkingNow(uid int)
+RETURNS boolean AS $$
+DECLARE
+    dow int;
+    hour int;
+    dayoption int;
+    d varchar;
+    shift int;
+BEGIN
+    SELECT EXTRACT(dow FROM now()), EXTRACT(hour FROM now()) INTO dow, hour;
+    SELECT day_option INTO dayoption FROM FTWorkSchedules WHERE FTWorkSchedules.uid = $1;
+    SELECT --dow, dayoption,
+        CASE
+            WHEN dayoption = dow THEN 'D1'
+            WHEN dayoption = (dow - 1) % 7 THEN 'D2'
+            WHEN dayoption = (dow - 2) % 7 THEN 'D3'
+            WHEN dayoption = (dow - 3) % 7 THEN 'D4'
+            WHEN dayoption = (dow - 4) % 7 THEN 'D5'
+            ELSE NULL
+        END INTO d;
+    IF d IS NULL THEN
+        RETURN False;
+    ELSE
+        EXECUTE 'SELECT ' || d || ' FROM FTWorkschedules WHERE FTWorkSchedules.uid =  $1 ORDER BY date_created DESC LIMIT 1'
+            INTO shift
+            USING $1;
+        IF (shift+9 < hour AND shift+13 > hour) OR (shift+14 < hour AND shift+18 > hour) THEN
+            RETURN True;
+        END IF;
+    END IF;
+    RETURN False;
+END;
+$$ language plpgsql;
+
+create or replace function getTotalWorkingFT()
+RETURNS numeric AS $$
+DECLARE
+    ftc int := 0;
+    bool boolean;
+    temprow FTWorkSchedules;
+BEGIN
+FOR temprow IN
+    SELECT * FROM FTWorkschedules LOOP  
+        SELECT FtWorkingNow(temprow.uid) INTO bool;
+        IF bool = True THEN
+            ftc := ftc + 1;
+        END IF;
+    END LOOP;
+RETURN ftc;
+END;
+$$ language plpgsql;
+
+create or replace function AtLeastFiveUsers()
+RETURNS boolean AS $$
+DECLARE
+    ptc int;
+    ftc int;
+BEGIN
+    SELECT COUNT(*) INTO ptc FROM PTWorkSchedules WHERE start_time < now() AND end_time > now();
+    SELECT getTotalWorkingFT() INTO ftc;
+    IF ptc + ftc >= 5 THEN
+        RETURN True;
+    END IF;
+    RETURN False;
+END;
+$$ language plpgsql;
 
 -- For this function, use 'SELECT * FROM GetFood(xxx);'
 -- Not doing so will result in the returned table becoming a tuple
@@ -947,7 +1007,8 @@ insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values 
 insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Hainan Chicken', '84674 Alpine Alley', 15, 3);
 insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Laksa Mama', '9 Crownhardt Terrace', 12, 7);
 
--- --FDSManagers
+--FDSManagers
+
 select NewFDSManager('Chadd Dumper','cdumper0','password','90075393','cdumper0@google.pl');
 select NewFDSManager('Lemuel Dignan','ldignan1','fe4C1rQ6h','96155025','ldignan1@weibo.com');
 select NewFDSManager('Doe Pickerin','dpickerin2','6cVuU03no','95909190','dpickerin2@photobucket.com');

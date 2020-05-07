@@ -24,6 +24,8 @@ const CostQuery =
     `SELECT EXTRACT(month FROM order_time) AS month, SUM(qty*price) AS costs
     FROM Orders NATURAL JOIN FoodOrders NATURAL JOIN Food
     GROUP BY EXTRACT(month FROM order_time)`;
+const StatusQuery =
+    `SELECT AtLeastFiveUsers()`;
 
 const CustOrderSummaryQuery =
     `WITH CO AS (
