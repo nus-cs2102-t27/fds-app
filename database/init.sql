@@ -2205,7 +2205,7 @@ insert into Orders(uid, location, order_time, payment_type, used_points) values 
 insert into FoodOrders(fid, oid, qty) values (18, 64, 5);
 insert into FoodOrders(fid, oid, qty) values (19, 64, 5);
 insert into FoodOrders(fid, oid, qty) values (20, 64, 10);
-insert into FoodOrders(fid, oid, qty) values (30, 64, )5;
+insert into FoodOrders(fid, oid, qty) values (30, 64, 5);
 insert into Orders(uid, location, order_time, payment_type, used_points) values (299, '3876 Blackbird Point', '2020-04-30 18:33:00', 0, 0);
 insert into FoodOrders(fid, oid, qty) values (244, 65, 5);
 insert into FoodOrders(fid, oid, qty) values (250, 65, 4);
@@ -2788,7 +2788,7 @@ insert into Deliveries(oid, uid, t1, t2, t3, t4) values (50, 703, '2020-04-28 13
 insert into Deliveries(oid, uid, t1, t2, t3, t4) values (51, 704, '2020-04-28 16:23:00', '2020-04-28 16:29:00', '2020-04-28 16:36:00', '2020-04-28 16:50:00');
 insert into Deliveries(oid, uid, t1, t2, t3, t4) values (52, 708, '2020-04-28 18:13:00', '2020-04-28 18:18:00', '2020-04-28 18:23:00', '2020-04-28 18:32:00');
 insert into Deliveries(oid, uid, t1, t2, t3, t4) values (53, 714, '2020-04-28 19:40:00', '2020-04-28 19:46:00', '2020-04-28 19:50:00', '2020-04-28 20:03:00');
-insert into Deliveries(oid, uid, t1, t2, t3, t4) values (54, 714, '2020-04-28 20:12:00', '2020-04-28 20:19:00', '2020-04-28 20:26:00', '2020-04-28 30:40:00');
+insert into Deliveries(oid, uid, t1, t2, t3, t4) values (54, 714, '2020-04-28 20:12:00', '2020-04-28 20:19:00', '2020-04-28 20:26:00', '2020-04-28 20:40:00');
 insert into Deliveries(oid, uid, t1, t2, t3, t4) values (55, 720, '2020-04-28 21:04:00', '2020-04-28 21:11:00', '2020-04-28 21:17:00', '2020-04-28 21:31:00');
 insert into Deliveries(oid, uid, t1, t2, t3, t4) values (56, 702, '2020-04-29 11:14:00', '2020-04-29 11:22:00', '2020-04-29 11:31:00', '2020-04-29 11:45:00');
 insert into Deliveries(oid, uid, t1, t2, t3, t4) values (57, 706, '2020-04-29 12:53:00', '2020-04-29 12:59:00', '2020-04-29 13:04:00', '2020-04-29 13:17:00');

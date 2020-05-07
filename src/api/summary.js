@@ -47,31 +47,59 @@ const RiderOrdersDeliveredQuery =
     FROM Riders NATURAL JOIN Deliveries
     GROUP BY uid, EXTRACT(month FROM t1)
     ORDER BY uid`;
-
+// SUM(DATE_PART('day', end_time::timestamp - start_time::timestamp) * 24 +
 // SELECT DATE_PART('day', '2020-05-05 18:00:00'::timestamp - '2020-05-05 12:00:00'::timestamp) * 24 + 
 //                 DATE_PART('hour', '2020-05-05 18:00:00'::timestamp - '2020-05-05 12:00:00'::timestamp) as hrs;
 const RiderHoursWorkedQuery = 
-    `SELECT uid, EXTRACT(month FROM date_joined) AS month,
+    `WITH sch AS (SELECT uid, EXTRACT(month FROM start_time) as month,
+    SUM(DATE_PART('hour', end_time::timestamp - start_time::timestamp)) as hrs
+    FROM Riders NATURAL JOIN PTWorkSchedules 
+    GROUP BY uid, EXTRACT(month FROM start_time)
+    UNION
+    SELECT f.uid, EXTRACT(month FROM start_time) , (40 * 4) 
+    FROM riders NATURAL JOIN FTWorkSchedules f, PTWorkSchedules
+    GROUP BY f.uid, EXTRACT(month FROM start_time))
+    SELECT DISTINCT Riders.uid, sch.month,
     CASE
-    WHEN uid in (SELECT uid FROM FTRiders)
-    THEN (40 * 4)
-    WHEN uid in (SELECT uid FROM PTRiders)
-    THEN SUM((SELECT DATE_PART('day', start_time::timestamp - end_time::timestamp) * 24 + 
-                    DATE_PART('hour', start_time::timestamp - end_time::timestamp)
-                    FROM PTWorkSchedules P
-                    WHERE uid = P.uid))
-    else 0
-    END AS Hours_Worked
-    FROM Users NATURAL JOIN Riders NATURAL JOIN FTWorkSchedules NATURAL JOIN PTWorkSchedules`;
+    WHEN Riders.uid IN (SELECT uid FROM sch)
+    THEN (SELECT hrs FROM sch s WHERE Riders.uid = s.uid AND s.month = sch.month)
+    ELSE 0
+    END AS hrs
+    FROM Riders, sch
+    ORDER BY uid`;
+
 const RiderSalaryQuery = 
-    `SELECT uid, EXTRACT(month FROM date_joined) AS month
+    `WITH sal AS (SELECT uid, EXTRACT(month FROM t1) AS month, monthly_base_salary + 2 * COUNT(*) AS monthly_salary
+    FROM FTRiders NATURAL JOIN Deliveries GROUP BY uid, EXTRACT(month FROM t1)
+    UNION
+    SELECT uid, EXTRACT(month FROM t1) AS month, 4 * weekly_base_salary + 2 * COUNT(*) AS monthly_salary
+    FROM PTRiders NATURAL JOIN Deliveries GROUP BY uid, EXTRACT(month FROM t1))
+    SELECT DISTINCT Riders.uid, sal.month,
     CASE
-    WHEN uid in (SELECT uid FROM FTRiders)
-    THEN (SELECT monthly_base_salary FROM FTRiders F WHERE uid = F.uid)
-    FROM uid NATURAL JOIN Riders NATURAL JOIN FTWorkSchedules NATURAL JOIN PTWorkSchedules`;
-const RiderDeliveryTimeQuery = 0;
-const RiderRatingsQuery = 0;
-const RiderAverageRatingsQuery = 0;
+    WHEN (Riders.uid IN (SELECT uid FROM sal) AND sal.month IN (SELECT month FROM sal WHERE Riders.uid = sal.uid))
+    THEN (SELECT monthly_salary FROM sal s WHERE Riders.uid = s.uid AND s.month = sal.month)
+    WHEN Riders.uid in (SELECT uid FROM FTRiders)
+    THEN (SELECT monthly_base_salary FROM FTRiders F WHERE Riders.uid = F.uid)
+    WHEN Riders.uid in (SELECT uid FROM PTRiders)
+    THEN 4 * (SELECT weekly_base_salary FROM PTRiders P WHERE Riders.uid = P.uid)
+    ELSE 0
+    END AS monthly_salary
+    FROM Riders, sal
+    ORDER BY uid`;
+
+const RiderDeliveryTimeQuery = 
+    `SELECT R.uid, EXTRACT(month FROM t1) as month, COALESCE(COUNT(D.uid),0) AS orders_delivered,
+    COALESCE(ROUND((SUM(DATE_PART('minute', t4::timestamp - t1::timestamp)) / COUNT(*))::numeric, 1),0) AS average_delivery_time
+    FROM Riders R LEFT OUTER JOIN Deliveries D
+    ON R.uid = D.uid
+    GROUP BY R.uid, EXTRACT(month FROM t1)
+    ORDER BY R.uid`;
+
+const RiderRatingsQuery = 
+    `SELECT DISTINCT R.uid, COALESCE(D.rating, 'NIL') AS Ratings
+    FROM Riders R LEFT OUTER JOIN Deliveries D
+    ON R.uid = D.uid
+    ORDER BY R.uid`;
 
 sumRouter.get("/cust", async (req, res) => {
     const { rows: customers } = await pgPool.query(NewCustomersQuery);
