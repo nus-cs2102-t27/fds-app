@@ -947,11 +947,7 @@ insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values 
 insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Hainan Chicken', '84674 Alpine Alley', 15, 3);
 insert into Restaurants (name, address, min_amt_threshold, delivery_fee) values ('Laksa Mama', '9 Crownhardt Terrace', 12, 7);
 
-<<<<<<< HEAD
 -- --FDSManagers
-=======
---FDSManagers
->>>>>>> origin/master
 select NewFDSManager('Chadd Dumper','cdumper0','password','90075393','cdumper0@google.pl');
 select NewFDSManager('Lemuel Dignan','ldignan1','fe4C1rQ6h','96155025','ldignan1@weibo.com');
 select NewFDSManager('Doe Pickerin','dpickerin2','6cVuU03no','95909190','dpickerin2@photobucket.com');
