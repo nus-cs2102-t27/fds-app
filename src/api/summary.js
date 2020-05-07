@@ -24,6 +24,8 @@ const CostQuery =
     `SELECT EXTRACT(month FROM order_time) AS month, SUM(qty*price) AS costs
     FROM Orders NATURAL JOIN FoodOrders NATURAL JOIN Food
     GROUP BY EXTRACT(month FROM order_time)`;
+const StatusQuery =
+    `SELECT AtLeastFiveUsers()`;
 
 const CustomerOrdersQuery = 
     `SELECT EXTRACT(month FROM order_time) AS month, uid, COUNT(*) AS orders
@@ -127,6 +129,12 @@ sumRouter.get("/cust", async (req, res) => {
     res.send(customers);
 });
 
+sumRouter.get("/status", async (req, res) => {
+    const { rows } = await pgPool.query(StatusQuery);
+    res.send(rows[0].atleastfiveusers);
+
+});
+
 sumRouter.get("custOrder", async(req, res) => {
     const { rows: custOrdersNumber } = await pgPool.query(CustomerOrdersQuery);
     const { rows: custOrdersCosts } = await pgPool.query(CustomerCostQuery);
@@ -142,7 +150,6 @@ sumRouter.get("rider", async(req, res) => {
     const { rows: riderSalary } = await pgPool.query(RiderSalaryQuery);
     const { rows: riderDelTime } = await pgPool.query(RiderDeliveryTimeQuery);
     const { rows: riderRatings } = await pgPool.query(RiderRatingsQuery);
-});
 
 function formatDate(date) {
     var year = date.getFullYear(),
