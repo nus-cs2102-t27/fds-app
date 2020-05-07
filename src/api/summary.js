@@ -144,6 +144,11 @@ sumRouter.get("/riderSumm", async(req, res) => {
     res.send(riderSummary);
 });
 
+sumRouter.get("/status", async (req, res) => {
+    const { rows } = await pgPool.query(StatusQuery);
+    res.send(rows[0]);
+});
+
 function formatDate(date) {
     var year = date.getFullYear(),
         month = monthNames[date.getMonth()];

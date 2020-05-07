@@ -17,9 +17,9 @@ ridRouter.get("/ftwork", async (req, res) => {
 ridRouter.get("/ptwork", async (req, res) => {
     const { rows } = await pgPool.query(PTStatusQuery, [req.cookies.uid]);
     if (rows.length === 0) {
-        res.send(False);
+        res.send(false);
     } else {
-        res.send(True);
+        res.send(true);
     }
 })
 
