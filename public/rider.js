@@ -8,6 +8,20 @@ $.ajax("/api/del/status").done(s => {
     $("#rider-button").append(getRiderButton(status));
 });
 
+$.ajax("/api/rid/ftwork").done(status => {
+    status ? $("#ft-work").append(`Start delivering!`) : "";
+    $("#work-status").append(`
+        ${status ? "YES" : "NO"}
+    `);
+});
+
+$.ajax("/api/rid/ptwork").done(status => {
+    status ? $("#pt-work").append(`Start delivering!`) : "";
+    $("#work-status").append(`
+        ${status ? "YES" : "NO"}
+    `);
+});
+
 function getRiderButton(status) {
     switch (status) {
         case "Travelling to restaurant":
