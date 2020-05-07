@@ -26,13 +26,4 @@ monthsumRouter.get("/orders", async (req, res) => {
     res.send(monthlySummary);
 });
 
-function formatDate(date) {
-    var year = date.getFullYear(),
-        month = monthNames[date.getMonth()];
-        day = date.getDate(),
-        hour = date.getHours();
-
-    return `${day} ${month} ${year}`;
-}
-
 module.exports = monthsumRouter;
