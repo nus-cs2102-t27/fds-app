@@ -34,7 +34,7 @@ const PTRiderSummaryQuery =
             AND U.uid = $1)
     ),
     HoursWorked as (
-        SELECT SUM(EXTRACT(EPOCH FROM end_time - start_time) / 3600)
+        SELECT COALESCE(SUM(EXTRACT(EPOCH FROM end_time - start_time) / 3600), 0)
         AS hours_worked
         FROM PTWorkSchedules
         WHERE uid = $1
