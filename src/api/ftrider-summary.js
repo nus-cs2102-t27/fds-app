@@ -4,7 +4,7 @@ const pgPool = require("../pg-pool");
 const riderSumRouter = express.Router();
 
 const LifetimeSalaryQuery =
-    `SELECT ((EXTRACT(year FROM age(CURRENT_DATE, U.date_joined)) * 12 + EXTRACT(month FROM age(CURRENT_DATE, U.date_joined)) + 10) * F.monthly_base_salary)
+    `SELECT ((EXTRACT(year FROM age(CURRENT_DATE, U.date_joined)) * 12 + EXTRACT(month FROM age(CURRENT_DATE, U.date_joined)) + 1) * F.monthly_base_salary)
     + ((SELECT COUNT(*) FROM Deliveries where uid = $1) * 2)
     AS lifetime_salary
     FROM Users U, FTRiders F
